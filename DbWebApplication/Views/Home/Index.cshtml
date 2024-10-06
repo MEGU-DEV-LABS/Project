@@ -1,0 +1,22 @@
+﻿@model StudentModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="wrapper">
+
+    <main class="main">
+        <div class="container">
+            <div class="form__block">
+                <form class="form" method="post" asp-action="Index" enctype="multipart/form-data">
+                    <input asp-for="LastName" class="input__name1" type="text" required placeholder="Прізвище">
+                    <input asp-for="FirstName" class="input__name1" type="text" required placeholder="Ім'я">
+                    <input asp-for="FatherName" class="input__name1" type="text" required placeholder="По батькові">
+                    <input asp-for="Faculty" class="input__name1" type="text" required placeholder="Факультет">
+
+                    <button class="button__form" type="submit">Переглянути оцінки</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>

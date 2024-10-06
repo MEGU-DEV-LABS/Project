@@ -1,0 +1,107 @@
+﻿
+
+@{
+   ViewData["Title"] = "Home Page";
+}
+
+<div class="wrapper">
+         
+<main class="main">
+   <section class="marks">
+      <div class="container">
+         <h3 class="marks__title">items</h3>
+         
+         <div class="marks__inner">
+            <div class="marks__inner_ctx">
+               <div class="con__img">
+                  <img src="images/icons/Пайтон.svg" alt="">
+                     
+               </div>
+               <p class="marks__inner_ctx__text">програмування на python</p>
+               <p class="marks__inner_ctx__text_num">4</p>
+            </div>
+            @*<div class="marks__inner_ctx">
+               <div class="con__img">
+                  <img src="images/icons/Філософія_1.svg" alt="">
+                     
+               </div>
+               <p class="marks__inner_ctx__text">Філософія
+               </p>
+               <p class="marks__inner_ctx__text_num">4</p>
+            </div>
+            <div class="marks__inner_ctx">
+               <div class="con__img">
+                  <img src="images/icons/Англійська.svg" alt="">
+                     
+               </div>
+               <p class="marks__inner_ctx__text">Англійська</p>
+               <p class="marks__inner_ctx__text_num">4</p>
+            </div>
+            <div class="marks__inner_ctx">
+               <div class="con__img">
+                  <img src="images/icons/Бази даних.svg" alt="">
+                     
+               </div>
+               <p class="marks__inner_ctx__text">Бази даних</p>
+               <p class="marks__inner_ctx__text_num">4</p>
+            </div>
+            <div class="marks__inner_ctx">
+               <div class="con__img">
+                  <img src="images/icons/Безпека програм.svg" alt="">
+                     
+               </div>
+               <p class="marks__inner_ctx__text">Безпека програм</p>
+               <p class="marks__inner_ctx__text_num">4</p>
+            </div>
+            <div class="marks__inner_ctx">
+               <div class="con__img">
+                  <img src="images/icons/Групова динаміка.svg" alt="">
+                     
+               </div>
+               <p class="marks__inner_ctx__text">Групова динаміка</p>
+               <p class="marks__inner_ctx__text_num">4</p>
+            </div>
+            <div class="marks__inner_ctx">
+               <div class="con__img">
+                  <img src="images/icons/ps_5.svg" alt="">
+                     
+               </div>
+               <p class="marks__inner_ctx__text">розробка комп'ютерних ігор</p>
+               <p class="marks__inner_ctx__text_num">4</p>
+            </div>
+            <div class="marks__inner_ctx">
+               <div class="con__img">
+                  <img src="images/icons/inet.svg" alt="">
+                     
+               </div>
+               <p class="marks__inner_ctx__text">програмування інтернету речей </p>
+               <p class="marks__inner_ctx__text_num">4</p>
+            </div>*@
+         </div>
+      </div>
+   </section>
+
+        
+      
+            
+
+        
+</main>
+   <h1>Оцінки студента: @Model.StudentFullName</h1>
+   <p>Факультет: @Model.Faculty</p>
+
+   @foreach (var subject in Model.Subjects)
+   {
+   <h2>@subject.SubjectName</h2>
+   <ul>
+      @foreach (var lab in subject.LabWorks)
+      {
+      <li>@lab.LabWorkName - Оцінка: @lab.GradeValue</li>
+      }
+   </ul>
+   }
+</div>
+
+
+
+<script src="js/main.js"></script>
