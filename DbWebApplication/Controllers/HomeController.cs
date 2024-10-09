@@ -46,18 +46,15 @@ public class HomeController : Controller
             return View(model);
         }
 
-        // Отримання предметів студента разом з лабораторними роботами та оцінками
-        var subjects = foundStudent.Subjects.Select(sub => new SubjectViewModel
+        var subjects = foundStudent.Subjects.Select(sub => new SubjectOverallViewModel
         {
             SubjectName = sub.SubjectName,
-            LabWorks = sub.LabWorks.Select(lab => new LabWorkViewModel
-            {
-                LabWorkName = lab.LabWorkName,
-                GradeValue = lab.LabWorkGrades
-                    .FirstOrDefault(lg => lg.StudentID == foundStudent.Id)?.GradeValue ?? 0
-            }).ToList()
+            OverallGrade = (int)sub.LabWorks
+                .Select(lab => lab.LabWorkGrades
+                    .FirstOrDefault(lg => lg.StudentID == foundStudent.Id)?.GradeValue ?? 0)
+                .Sum() // Підсумовуємо всі оцінки за лабораторні роботи
         }).ToList();
-
+        
         // Формування ViewModel для передачі на сторінку GradesOfStudent
         var studentGradesViewModel = new StudentGradesViewModel
         {
@@ -75,7 +72,7 @@ public class HomeController : Controller
 
 
 
-    public IActionResult GradesOfStudent()
+    public async Task<IActionResult> GradesOfStudent()
     {
         if (TempData["StudentGrades"] == null)
         {
@@ -84,8 +81,13 @@ public class HomeController : Controller
         }
 
         var studentGradesViewModel = JsonConvert.DeserializeObject<StudentGradesViewModel>(TempData["StudentGrades"].ToString());
+
+        // Зберігаємо дані в TempData, щоб вони залишилися доступними після перезавантаження
+        TempData.Keep("StudentGrades");
+
         return View(studentGradesViewModel);
     }
+
 
 
 

@@ -10,16 +10,21 @@
    <section class="marks">
       <div class="container">
          <h3 class="marks__title">items</h3>
-         
+
+         <h1>Оцінки студента: @Model.StudentFullName</h1>
+         <p>Факультет: @Model.Faculty</p>
          <div class="marks__inner">
-            <div class="marks__inner_ctx">
-               <div class="con__img">
-                  <img src="images/icons/Пайтон.svg" alt="">
+         @foreach (var subject in Model.Subjects)
+         {
+         <div class="marks__inner_ctx">
+            <div class="con__img">
+               <img src="images/icons/Пайтон.svg" alt="">
                      
-               </div>
-               <p class="marks__inner_ctx__text">програмування на python</p>
-               <p class="marks__inner_ctx__text_num">4</p>
             </div>
+            <p class="marks__inner_ctx__text">@subject.SubjectName</p>
+            <p class="marks__inner_ctx__text_num">@subject.OverallGrade</p>
+         </div>
+         }
             @*<div class="marks__inner_ctx">
                <div class="con__img">
                   <img src="images/icons/Філософія_1.svg" alt="">
@@ -80,26 +85,7 @@
          </div>
       </div>
    </section>
-
-        
-      
-            
-
-        
 </main>
-   <h1>Оцінки студента: @Model.StudentFullName</h1>
-   <p>Факультет: @Model.Faculty</p>
-
-   @foreach (var subject in Model.Subjects)
-   {
-   <h2>@subject.SubjectName</h2>
-   <ul>
-      @foreach (var lab in subject.LabWorks)
-      {
-      <li>@lab.LabWorkName - Оцінка: @lab.GradeValue</li>
-      }
-   </ul>
-   }
 </div>
 
 
