@@ -171,3 +171,4 @@ C:\Users\popug\my space\ASPLessons\DbWebApplication\DbWebApplication\obj\Debug\n
 C:\Users\popug\my space\ASPLessons\DbWebApplication\DbWebApplication\obj\Debug\net8.0\staticwebassets\msbuild.DbWebApplication.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
 C:\Users\popug\my space\ASPLessons\DbWebApplication\DbWebApplication\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\popug\my space\ASPLessons\DbWebApplication\DbWebApplication\obj\Debug\net8.0\DbWebApplication.sourcelink.json
+C:\Users\popug\my space\ASPLessons\DbWebApplication\DbWebApplication\bin\Debug\net8.0\Python.Runtime.dll

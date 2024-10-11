@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Reflection;
 using DbWebApplication.Data;
+using DbWebApplication.LightMethodHelpers;
 using Microsoft.AspNetCore.Mvc;
 using DbWebApplication.Models;
 using DbWebApplication.Repository;
@@ -59,7 +62,7 @@ public class HomeController : Controller
         var studentGradesViewModel = new StudentGradesViewModel
         {
             StudentFullName = $"{foundStudent.LastName} {foundStudent.FirstName} {foundStudent.FatherName}",
-            Faculty = foundStudent.Faculty,
+            Faculty = foundStudent.Faculty.GetDisplayName(),
             Subjects = subjects
         };
 

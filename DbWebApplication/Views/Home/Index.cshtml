@@ -13,10 +13,10 @@
                     <input asp-for="LastName" class="input__name1" type="text" required placeholder="Прізвище">
                     <input asp-for="FirstName" class="input__name1" type="text" required placeholder="Ім'я">
                     <input asp-for="FatherName" class="input__name1" type="text" required placeholder="По батькові">
-                    <input asp-for="Faculty" class="input__name1" type="text" required placeholder="Факультет">
-                    @*<select id="prioritySearch" class="input__name1 mb-3" asp-items="Html.GetEnumSelectList<Faculty>()">
+                    @*<input asp-for="Faculty" class="input__name1" type="text" required placeholder="Факультет">*@
+                    <select id="prioritySearch" class="input__name1 mb-3" asp-items="Html.GetEnumSelectList<Faculty>()">
                         <option value="">Факультет</option>
-                    </select>*@
+                    </select>
 
                     <button class="button__form" type="submit">Переглянути оцінки</button>
                 </form>
