@@ -1,26 +1,50 @@
-﻿@using DbWebApplication.Enum
-@model StudentModel
-@{
-    ViewData["Title"] = "Home Page";
+﻿@{
+    ViewData["Title"] = "Student Grades";
 }
 
-<div class="wrapper">
-
+@*<h1>Студент: @Model.FirstName</h1>
+<h1>@Model.LastName</h1>
+<p>Факультет: @Model.Faculty</p>
+<div class="marks__inner">
+    @foreach (var subject in Model.Subjects)
+    {
+    <div class="marks__inner_ctx">
+        <p class="marks__inner_ctx__text">@subject.SubjectName</p>
+        <img src="@(subject.ImageBase64 != null ? "data:image/jpeg;base64," + subject.ImageBase64 : "")" alt="Subject Image" style="max-width: 200px; min-height: 100px; object-fit: cover;" />
+    </div>
+    }
+</div>*@
+@*<div class="wrapper">
     <main class="main">
-        <div class="container">
-            <div class="form__block">
-                <form class="form" method="post" asp-action="Index" enctype="multipart/form-data">
-                    <input asp-for="LastName" class="input__name1" type="text" required placeholder="Прізвище">
-                    <input asp-for="FirstName" class="input__name1" type="text" required placeholder="Ім'я">
-                    <input asp-for="FatherName" class="input__name1" type="text" required placeholder="По батькові">
-                    @*<input asp-for="Faculty" class="input__name1" type="text" required placeholder="Факультет">*@
-                    <select id="prioritySearch" class="input__name1 mb-3" asp-items="Html.GetEnumSelectList<Faculty>()">
-                        <option value="">Факультет</option>
-                    </select>
+        <section class="marks">
+            <div class="container">
+                <h3 class="marks__title">items</h3>
 
-                    <button class="button__form" type="submit">Переглянути оцінки</button>
-                </form>
+                $1$<h1>Оцінки студента: @Model.StudentFullName</h1>#1#
+                <p>Факультет: @Model.Faculty</p>
+                <div class="marks__inner">
+                    @foreach (var subject in Model.Subjects)
+                    {
+                    <div class="marks__inner_ctx">
+                        <div class="con__img">
+                            <img src="@(subject.ImageBase64 != null ? "data:image/jpeg;base64," + subject.ImageBase64 : "")" alt="Subject Image" style="max-width: 200px; min-height: 100px; object-fit: cover;" />
+                        </div>
+                        <p class="marks__inner_ctx__text">@subject.SubjectName</p>
+                        $1$<p class="marks__inner_ctx__text_num">@subject.OverallGrade</p>#1#
+                    </div>
+                    }
+                </div>
             </div>
-        </div>
+        </section>
     </main>
-</div>
+</div>*@
+
+
+<button>
+    <a href="@Url.Action("GradesOfStudent")" class="btn btn-primary">Предмети</a>
+</button>
+<button>
+    <a href="@Url.Action("GradesOfStudent")" class="btn btn-primary">Заліковка</a>
+</button>
+
+<script src="js/main.js"></script>

@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - DbWebApplication</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/DbWebApplication.styles.css" asp-append-version="true"/>
+    @*<link rel="stylesheet" href="~/DbWebApplication.styles.css" asp-append-version="true"/>*@
     <link rel="stylesheet" href="~/css/reset.css">
     <link rel="stylesheet" href="~/css/style.css">
 </head>
 <body>
+<div class="wrapper">
 <header class="header">
     <div class="container">
+
         <div class="img__con">
             <img src="~/images/icons/iueh-logo-gerb.png" alt="">
 
@@ -21,20 +23,27 @@
 </header>
 
 <div class="container">
+    
     <main role="main" class="pb-3">
-        @RenderBody()
+        <div class="container">
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <partial name="_LoginPartial.cshtml"/>
+            </div>
+            @RenderBody()
+        </div>
     </main>
 </div>
 
-<!--<footer class="footer">
+<footer class="footer">
     <div class="img__con2">
         <img src="~/images/icons/iueh-logo-gerb.png" alt="">
 
     </div>
-</footer>-->
+</footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
+</div>
 </body>
 </html>

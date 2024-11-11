@@ -1,0 +1,18 @@
+﻿@model DbWebApplication.ViewModels.SubjectDetailsViewModel
+
+@{
+}
+
+
+<p>@Model.SubjectName</p>
+<p>@Model.OverallGrade</p>
+<img src="@(Model.Picture != null ? "data:image/jpeg;base64," + Model.Picture : "")" alt="Subject Image" style="max-width: 200px; min-height: 100px; object-fit: cover;" />
+
+<br/>
+
+@foreach (var lab in Model.LabaratoryWorks)
+{
+    <p>@lab.LabWorkName</p>
+    <p>@lab.LabWorkGrade</p>
+}
+

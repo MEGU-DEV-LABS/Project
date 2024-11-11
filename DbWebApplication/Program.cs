@@ -1,6 +1,9 @@
+using DbWebApplication;
 using DbWebApplication.Data;
+using DbWebApplication.Services;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Identity;
+using ZXing.QrCode;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -8,8 +11,27 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 // Add services to the container.
-builder.Services.AddControllersWithViews();
 
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.AddMemoryCache();
+builder.Services.AddSession();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/User/Login";
+    options.AccessDeniedPath = "/User/AccessDenied";
+});
+
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<StudentService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<PythonQrService>();
+builder.Services.AddScoped<QrCodeService>();
 var app = builder.Build();
 
 
@@ -26,10 +48,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication();   
+app.UseAuthorization();  
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
+
 
 app.Run();

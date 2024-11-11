@@ -12,17 +12,17 @@
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"guk3vi3jb2"},{"Name":"integrity","Value":"sha256-uHw0cnhLKkPsTr7ToNuG90sgaMXgWQQG6HJUW88w6nA="},{"Name":"label","Value":"_content/DbWebApplication/css/reset.css"}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1719"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022uHw0cnhLKkPsTr7ToNuG90sgaMXgWQQG6HJUW88w6nA=\u0022"},{"Name":"Last-Modified","Value":"Mon, 12 Aug 2019 12:44:06 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/DbWebApplication/css/style.80y3fp7d7g.css">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\style.css'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"80y3fp7d7g"},{"Name":"integrity","Value":"sha256-6PGG9ZFKGNQqnh3XaA\u002BxGF2pO8sNlTZJXWA8\u002BGfLiFg="},{"Name":"label","Value":"_content/DbWebApplication/css/style.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2930"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00226PGG9ZFKGNQqnh3XaA\u002BxGF2pO8sNlTZJXWA8\u002BGfLiFg=\u0022"},{"Name":"Last-Modified","Value":"Sun, 22 Sep 2024 17:36:51 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DbWebApplication/css/style.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\style.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-6PGG9ZFKGNQqnh3XaA\u002BxGF2pO8sNlTZJXWA8\u002BGfLiFg="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"2930"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00226PGG9ZFKGNQqnh3XaA\u002BxGF2pO8sNlTZJXWA8\u002BGfLiFg=\u0022"},{"Name":"Last-Modified","Value":"Sun, 22 Sep 2024 17:36:51 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-2tih7nuJFmVKDfKg1/yah1CgaKG3fiMdS2j4F4UDwRc="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"4100"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00222tih7nuJFmVKDfKg1/yah1CgaKG3fiMdS2j4F4UDwRc=\u0022"},{"Name":"Last-Modified","Value":"Fri, 08 Nov 2024 14:42:43 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DbWebApplication/css/style.i2gyzw5mv4.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\style.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"i2gyzw5mv4"},{"Name":"integrity","Value":"sha256-2tih7nuJFmVKDfKg1/yah1CgaKG3fiMdS2j4F4UDwRc="},{"Name":"label","Value":"_content/DbWebApplication/css/style.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"4100"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00222tih7nuJFmVKDfKg1/yah1CgaKG3fiMdS2j4F4UDwRc=\u0022"},{"Name":"Last-Modified","Value":"Fri, 08 Nov 2024 14:42:43 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DbWebApplication/DbWebApplication.18jn7x1wvs.bundle.scp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\DbWebApplication.18jn7x1wvs.bundle.scp.css'))</AssetFile>

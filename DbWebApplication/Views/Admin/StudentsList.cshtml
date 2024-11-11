@@ -1,0 +1,35 @@
+﻿@using DbWebApplication.Extensions
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<StudentModel>
+
+
+<ul>
+    @foreach (var student in Model)
+    {
+        <li>
+            <form asp-action="StudentsList" method="post">
+                <input type="text" value="@student.FirstName" readonly style="display: inline-block; margin-right: 10px;"/>
+                <input type="text" value="@student.LastName" readonly style="display: inline-block; margin-right: 10px;"/>
+                <input type="text" value="@student.FatherName" readonly style="display: inline-block; margin-right: 10px;"/>
+                <input type="text" value="@student.Faculty.GetDisplayName()" readonly style="display: inline-block; margin-right: 10px;"/>
+
+                <!-- Додаємо приховані поля для передачі значень -->
+                <input type="hidden" name="FirstName" value="@student.FirstName" />
+                <input type="hidden" name="LastName" value="@student.LastName" />
+                <input type="hidden" name="FatherName" value="@student.FatherName" />
+                <input type="hidden" name="Faculty" value="@student.Faculty" />
+
+                <button type="submit">
+                    Обробити студента
+                </button>
+            </form>
+
+
+        </li>
+    }
+</ul>
+
+<script>
+    
+</script>
+ 

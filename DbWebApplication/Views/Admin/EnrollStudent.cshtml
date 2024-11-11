@@ -1,0 +1,30 @@
+﻿@model DbWebApplication.ViewModels.EnrollStudentViewModel
+@using DbWebApplication.Enum
+@{
+}
+
+
+<h1>Запис на предмет</h1>
+<br/>
+<form class="form" method="post" asp-action="EnrollStudent" enctype="multipart/form-data">
+    <input asp-for="LastName" class="input__name1" type="text" required placeholder="Прізвище">
+    <input asp-for="FirstName" class="input__name1" type="text" required placeholder="Ім'я">
+    <input asp-for="FatherName" class="input__name1" type="text" required placeholder="По батькові">
+    @*<input asp-for="Faculty" class="input__name1" type="text" required placeholder="Факультет">*@
+    <select class="input__name1 mb-3" asp-items="Html.GetEnumSelectList<Faculty>()">
+        <option value="">Факультет</option>
+    </select>
+    
+    <div class="mb-3">
+        <label asp-for="SubjectName" class="form-label">Subject Name</label>
+        <select asp-for="SubjectName" class="form-select">
+            @foreach (var subject in Model.Subjects)
+            {
+            <option value="@subject">@subject</option>
+            }
+        </select>
+        <span asp-validation-for="SubjectName" class="text-danger"></span>
+    </div>
+
+    <button class="button__form" type="submit">Записати</button>
+</form>

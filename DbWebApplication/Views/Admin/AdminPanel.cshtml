@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Панель адміна";
+}
+
+<h1>Admin Panel</h1>
+<h1>@Model.FirstName</h1>
+<h1>@Model.LastName</h1>
+
+<br>
+<br>
+<button>
+    <a href="@Url.Action("Create")" class="btn btn-primary">Створити предмет</a>
+</button>
+<button>
+    <a href="@Url.Action("Register")" class="btn btn-primary">Створити студента</a>
+</button>
+<button>
+    <a href="@Url.Action("EnrollStudent")" class="btn btn-primary">Створити зв'язок</a>
+</button>
+<button>
+    <a href="@Url.Action("StudentsList")" class="btn btn-primary">Список студентів</a>
+</button>
+
