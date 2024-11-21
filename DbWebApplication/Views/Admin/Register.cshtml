@@ -42,7 +42,7 @@ ViewData["Title"] = "Register";
             <span asp-validation-for="FatherName" class="text-danger"></span>
         </div>
         <div class="form-floating mb-3">
-            <select asp-for="Faculty" class="form-select" asp-items="Html.GetEnumSelectList<Faculty>()">
+            <select asp-for="Faculty" class="form-control" asp-items="Html.GetEnumSelectList<Faculty>()">
                 <option>Вибрати</option>
             </select>
             <span asp-validation-for="Faculty" class="text-danger"></span>

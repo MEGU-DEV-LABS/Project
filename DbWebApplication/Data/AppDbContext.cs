@@ -14,6 +14,9 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<LabModel> LabWorks { get; set; }
     public DbSet<StudentModel> Students { get; set; }
     public DbSet<LabWorkGradeModel> LabWorkGrade { get; set; }
+    
+    public DbSet<SessionSubjects> SessionSubjects { get; set; }
+    public DbSet<SessionGrades> SessionGrades { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -47,5 +50,18 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
             .WithMany()
             .HasForeignKey(s => s.ApplicationUserId)
             .IsRequired();
+        
+        modelBuilder.Entity<SessionGrades>()
+            .HasOne(sg => sg.Student)
+            .WithMany(s => s.SessionGrades)
+            .HasForeignKey(sg => sg.StudentId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // SessionGrades to Session relationship (Many-to-One)
+        modelBuilder.Entity<SessionGrades>()
+            .HasOne(sg => sg.SessionSubjects)
+            .WithMany()
+            .HasForeignKey(sg => sg.SessionId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

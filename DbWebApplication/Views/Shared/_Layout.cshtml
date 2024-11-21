@@ -13,31 +13,27 @@
 <div class="wrapper">
 <header class="header">
     <div class="container">
-
         <div class="img__con">
             <img src="~/images/icons/iueh-logo-gerb.png" alt="">
 
         </div>
     </div>
-
+    <div style="text-align: right; border-bottom: 3px solid #000000; ">
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between mg" style="margin: 20px 100px 20px 20px; display: flex; align-items: center; justify-content: center;">
+            <partial name="_LoginPartial.cshtml"/>
+        </div>
+    </div>
 </header>
-
 <div class="container">
-    
     <main role="main" class="pb-3">
         <div class="container">
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <partial name="_LoginPartial.cshtml"/>
-            </div>
             @RenderBody()
         </div>
     </main>
 </div>
-
 <footer class="footer">
     <div class="img__con2">
         <img src="~/images/icons/iueh-logo-gerb.png" alt="">
-
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

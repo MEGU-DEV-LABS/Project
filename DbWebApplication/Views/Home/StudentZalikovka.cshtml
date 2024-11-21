@@ -1,0 +1,20 @@
+﻿@model List<DbWebApplication.ViewModels.SessionSubjectViewModel>
+
+<div style="text-align: center">
+    <div class="d-flex justify-content-center mb-5 ">
+        <h1>Заліковка</h1>
+    </div>
+    <br>
+    @{
+        foreach (var grade in @Model)
+        {
+            <p class="d-flex justify-content-center" style="width: 100%;             /* Займає всю ширину контейнера */
+    padding: 10px;           /* Внутрішній відступ */
+    margin-bottom: 10px;     /* Відступ між параграфами */
+    background-color: #f0f0f0; /* Світлий фон для візуального розділення */
+    border-radius: 8px;      /* Заокруглені краї */
+    text-align: center;      /* Центрує текст всередині */
+border: 2px solid #ccc; ">@grade.SessionSubject: @grade.Grade</p>
+        }
+    }
+</div>

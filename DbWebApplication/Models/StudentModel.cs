@@ -20,4 +20,5 @@ public class StudentModel
     public DateTime? TokenDateExpired { get; set; }
     
     public ICollection<SubjectModel> Subjects { get; set; } = new List<SubjectModel>();
+    public ICollection<SessionGrades> SessionGrades { get; set; } = new List<SessionGrades>();
 }

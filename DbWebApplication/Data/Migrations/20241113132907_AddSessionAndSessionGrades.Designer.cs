@@ -4,6 +4,7 @@ using DbWebApplication.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbWebApplication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241113132907_AddSessionAndSessionGrades")]
+    partial class AddSessionAndSessionGrades
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,12 +160,15 @@ namespace DbWebApplication.Migrations
                     b.Property<int>("SessionId")
                         .HasColumnType("int");
 
+                    b.Property<int>("SessionSubjectsId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SessionId");
+                    b.HasIndex("SessionSubjectsId");
 
                     b.HasIndex("StudentId");
 
@@ -177,8 +183,9 @@ namespace DbWebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Faculty")
-                        .HasColumnType("int");
+                    b.Property<string>("Faculty")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Subject")
                         .IsRequired()
@@ -450,12 +457,12 @@ namespace DbWebApplication.Migrations
                 {
                     b.HasOne("DbWebApplication.Models.SessionSubjects", "SessionSubjects")
                         .WithMany()
-                        .HasForeignKey("SessionId")
+                        .HasForeignKey("SessionSubjectsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DbWebApplication.Models.StudentModel", "Student")
-                        .WithMany("SessionGrades")
+                        .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -545,11 +552,6 @@ namespace DbWebApplication.Migrations
             modelBuilder.Entity("DbWebApplication.Models.LabModel", b =>
                 {
                     b.Navigation("LabWorkGrades");
-                });
-
-            modelBuilder.Entity("DbWebApplication.Models.StudentModel", b =>
-                {
-                    b.Navigation("SessionGrades");
                 });
 
             modelBuilder.Entity("DbWebApplication.Models.SubjectModel", b =>

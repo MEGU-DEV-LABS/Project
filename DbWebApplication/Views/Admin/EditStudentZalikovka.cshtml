@@ -1,0 +1,26 @@
+﻿@using DbWebApplication.ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<DbWebApplication.ViewModels.SessionSubjectViewModel>
+
+
+
+<form asp-action="EditStudentZalikovka" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+    <div class="d-flex justify-content-center align-items-center flex-column">
+        <div class="form-floating mb-3 text-center">
+            <h1>@ViewBag.Student.LastName @ViewBag.Student.FirstName @ViewBag.Student.FatherName</h1>
+        </div>
+        <input hidden name="studentId" value="@ViewBag.Student.Id">
+
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <div class="form-floating mb-3 text-center">
+                <input asp-for="@Model[@i].SessionSubject" readonly class="form-control" />
+                <input asp-for="@Model[@i].Grade" class="form-control" />
+            </div>
+        }
+
+        <button type="submit" class="btn btn-primary">
+            Submit
+        </button>
+    </div>
+</form>

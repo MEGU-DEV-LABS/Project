@@ -55,6 +55,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/popug/my space/ASPLessons/DbWebApplication/DbWebApplication/Views/Admin/DetermineSessionSubjects.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGV0ZXJtaW5lU2Vzc2lvblN1YmplY3RzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/popug/my space/ASPLessons/DbWebApplication/DbWebApplication/Views/Admin/EditStudentZalikovka.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFN0dWRlbnRaYWxpa292a2EuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/popug/my space/ASPLessons/DbWebApplication/DbWebApplication/Views/Admin/EnrollStudent.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRW5yb2xsU3R1ZGVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -67,12 +75,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cU3R1ZGVudHNMaXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/popug/my space/ASPLessons/DbWebApplication/DbWebApplication/Views/Admin/WriteStudentZalikovka.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cV3JpdGVTdHVkZW50WmFsaWtvdmthLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/popug/my space/ASPLessons/DbWebApplication/DbWebApplication/Views/Home/GradesOfStudent.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHcmFkZXNPZlN0dWRlbnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/popug/my space/ASPLessons/DbWebApplication/DbWebApplication/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/popug/my space/ASPLessons/DbWebApplication/DbWebApplication/Views/Home/StudentZalikovka.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTdHVkZW50WmFsaWtvdmthLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/popug/my space/ASPLessons/DbWebApplication/DbWebApplication/Views/Home/SubjectDetails.cshtml]

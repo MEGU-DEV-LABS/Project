@@ -11,34 +11,21 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Python.Runtime;
 
 
 namespace DbWebApplication.Controllers;
 
 [Authorize(Roles = "Admin")]
-public class AdminController : Controller
+public class AdminController(
+    StudentService studentService,
+    UserManager<ApplicationUser> userManager,
+    AppDbContext context,
+    SignInManager<ApplicationUser> signInManager,
+    UserService userService,
+    QrCodeService qrCodeService)
+    : Controller
 {
-    private readonly StudentService _studentService;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly AppDbContext _context;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly UserService _userService;
-    private readonly QrCodeService _qrCodeService;
-    
-    public AdminController(
-        StudentService studentService, 
-        UserManager<ApplicationUser> userManager, 
-        AppDbContext context, 
-        SignInManager<ApplicationUser> signInManager, UserService userService, QrCodeService qrCodeService)
-    {
-        _studentService = studentService;
-        _userManager = userManager;
-        _context = context;
-        _signInManager = signInManager;
-        _userService = userService;
-        _qrCodeService = qrCodeService;
-    }
-    
     [HttpGet]
     public async Task<IActionResult> AdminPanel()
     {
@@ -47,7 +34,7 @@ public class AdminController : Controller
             return RedirectToAction("Login", "User");
         }
 
-        var user = await _userManager.GetUserAsync(User);
+        var user = await userManager.GetUserAsync(User);
 
         if (user == null)
         {
@@ -73,22 +60,22 @@ public class AdminController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
-            var externalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            var externalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid || model.Role == Role.Admin)
             {
-                var user = _userService.CreateUser();
+                var user = userService.CreateUser();
 
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
                 user.UserName = model.Email;
                 user.Email = model.Email;
                 
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var result = await userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
-                    await _userService.GetRolesAsync(user,model);
-                    await _userService.CreateStudentIfNotAdmin(model, user);
+                    await userService.GetRolesAsync(user,model);
+                    await userService.CreateStudentIfNotAdmin(model, user);
                     
                     return RedirectToAction(nameof(Register));
                 }
@@ -109,7 +96,7 @@ public class AdminController : Controller
     {
         if (ModelState.IsValid)
         {
-            byte[] imageData = await _studentService.ConvertImageToByteArrayAsync(model.imageFile); 
+            byte[] imageData = await studentService.ConvertImageToByteArrayAsync(model.imageFile); 
 
             var subject = new SubjectModel()
             {
@@ -117,8 +104,8 @@ public class AdminController : Controller
                 ImageData = imageData
             };
 
-            _context.Subjects.Add(subject); 
-            await _context.SaveChangesAsync();
+            context.Subjects.Add(subject); 
+            await context.SaveChangesAsync();
             return RedirectToAction("AdminPanel");
         }
         return View(model);
@@ -129,7 +116,7 @@ public class AdminController : Controller
     {
         var model = new EnrollStudentViewModel
         {
-            Subjects = _studentService.GetSubjectsNames()
+            Subjects = studentService.GetSubjectsNames()
         };
         return View(model);
     }
@@ -137,15 +124,15 @@ public class AdminController : Controller
     [HttpPost]
     public async Task<IActionResult> EnrollStudent(EnrollStudentViewModel model)
     {
-        var student = await _studentService.GetByIdAsync<StudentModel>(model);
-        var subject = await _studentService.GetByIdAsync<SubjectModel>(model);
+        var student = await studentService.GetByIdAsync<StudentModel>(model);
+        var subject = await studentService.GetByIdAsync<SubjectModel>(model);
 
         if (student == null && subject == null)
         {
             return NotFound();
         }
 
-        await _studentService.AddStudentToSubjectAsync(student.Id, subject.SubjectID);
+        await studentService.AddStudentToSubjectAsync(student.Id, subject.SubjectID);
         
         return View(model);
     }
@@ -153,30 +140,64 @@ public class AdminController : Controller
     [HttpGet]
     public IActionResult StudentsList()
     {
-        var list = _context.Students.ToList();
+        var list = context.Students.ToList();
         return View(list);
     }
     
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> StudentsList(string FirstName, string lastName, string fatherName, Faculty faculty)
+    public async Task<IActionResult> StudentsList(int Id)
     {
-        var student = new EnrollStudentViewModel()
-        {
-            FirstName = FirstName,
-            LastName = lastName,
-            FatherName = fatherName,
-            Faculty = faculty
-        };
-
-        var s = await _studentService.GetByIdAsync<StudentModel>(student);
-        await _studentService.AddQrTokenToStudentAsync(s);
-        var qr = _qrCodeService.GenerateQRCode(s.QrCodeToken);
-        var res = _qrCodeService.ConvertBitmapToByteArray(qr);
-        return File(res, "image/png", $"{student.LastName}.png");
-        return View();
+        var s = await studentService.GetStudentByIdAsync(Id);
+        await studentService.AddQrTokenToStudentAsync(s);
+        var qr = qrCodeService.GenerateQRCode(s.QrCodeToken);
+        var res = qrCodeService.ConvertBitmapToByteArray(qr);
+        return File(res, "image/png", $"{s.LastName}.png");
     }
 
+    [HttpGet]
+    public async Task<IActionResult> DetermineSessionSubjects()
+    {
+        var subjects = await studentService.GetSubjectsWithIdAsync();
+        return View(subjects);
+    }
     
-    
+    [HttpPost]
+    public async Task<IActionResult> DetermineSessionSubjects(ListSubcestsAndIDViewModel model)
+    {
+        await studentService.AddSubjectToSessionAsync(model);
+        return RedirectToAction("StudentsList");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> EditStudentZalikovka(int Id)
+    {
+        var student = await studentService.GetStudentByIdAsync(Id);
+        ViewBag.Student = student;
+        var sessionSubject = await studentService.PrepareSessionSubjectViewModelAsync(student);
+        return View(sessionSubject);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EditStudentZalikovka(List<SessionSubjectViewModel> list, int studentId)
+    {
+        var student = await studentService.GetStudentByIdAsync(studentId);
+
+        foreach (var sub in list)
+        {
+            var sessionSubject = await studentService.GetSessionSubjectAsync(sub.SessionSubject, student.Faculty);
+
+            if (sessionSubject != null)
+            {
+                var grade = await studentService.GetSessionGradeAsync(studentId, sessionSubject.Id);
+
+                if (grade != null)
+                {
+                    await studentService.UpdateSessionGradeAsync(grade, sub.Grade);
+                }
+            }
+        }
+
+        return RedirectToAction("StudentsList");
+    }
 }

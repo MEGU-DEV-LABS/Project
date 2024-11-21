@@ -2,17 +2,28 @@
 
 @{
 }
+<div style="text-align: center">
+    <div class="d-flex justify-content-center mb-5 ">
+        <p>@Model.SubjectName</p>
+    </div>
 
+    <img src="@(Model.Picture != null ? "data:image/jpeg;base64," + Model.Picture : "")" alt="Subject Image" style="max-width: 200px; min-height: 100px; object-fit: cover; margin-bottom: 50px" />
 
-<p>@Model.SubjectName</p>
-<p>@Model.OverallGrade</p>
-<img src="@(Model.Picture != null ? "data:image/jpeg;base64," + Model.Picture : "")" alt="Subject Image" style="max-width: 200px; min-height: 100px; object-fit: cover;" />
+    <br/>
 
-<br/>
+    @foreach (var lab in Model.LabaratoryWorks)
+    {
+        <div class="d-flex justify-content-center" style="width: 100%;             /* Займає всю ширину контейнера */
+    padding: 10px;           /* Внутрішній відступ */
+    margin-bottom: 10px;     /* Відступ між параграфами */
+    background-color: #f0f0f0; /* Світлий фон для візуального розділення */
+    border-radius: 8px;      /* Заокруглені краї */
+    text-align: center;      /* Центрує текст всередині */
+border: 2px solid #ccc; ">
+            <p>@lab.LabWorkName: @lab.LabWorkGrade</p>
+        </div>
+    
+    }
 
-@foreach (var lab in Model.LabaratoryWorks)
-{
-    <p>@lab.LabWorkName</p>
-    <p>@lab.LabWorkGrade</p>
-}
-
+    <p class="m-4 mt-5">Загальна оцінка: @Model.OverallGrade</p>
+</div>

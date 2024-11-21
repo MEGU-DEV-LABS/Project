@@ -9,11 +9,14 @@
 <main class="main">
    <section class="marks">
       <div class="container">
-         <h3 class="marks__title">items</h3>
+         <h3 class="marks__title">Предмети</h3>
 
-         <h1>Оцінки студента: @Model.StudentFullName</h1>
          
-         <p>Факультет: @Model.Faculty</p>
+         <div style="margin: 50px">
+            <h1>Оцінки студента: @Model.StudentFullName</h1>
+
+            <p>Факультет: @Model.Faculty</p>
+         </div>
          
          <div class="marks__inner">
          @foreach (var subject in Model.Subjects)

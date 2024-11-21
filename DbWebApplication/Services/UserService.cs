@@ -8,17 +8,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DbWebApplication.Services;
 
-public class UserService
+public class UserService(AppDbContext context, UserManager<ApplicationUser> userManager)
 {
-    private readonly AppDbContext _context;
-    private readonly UserManager<ApplicationUser> _userManager;
-    
-    public UserService(AppDbContext context, UserManager<ApplicationUser> userManager)
-    {
-        _context = context;
-        _userManager = userManager;
-    }
-    
     public ApplicationUser CreateUser()
     {
         try
@@ -37,11 +28,11 @@ public class UserService
     {
         if (model.Role == Role.Admin)
         {
-            await _userManager.AddToRoleAsync(user, "Admin");
+            await userManager.AddToRoleAsync(user, "Admin");
         }
         else
         {
-            await _userManager.AddToRoleAsync(user, "User");
+            await userManager.AddToRoleAsync(user, "User");
         }
     }
     
@@ -57,8 +48,8 @@ public class UserService
                 ApplicationUserId = user.Id 
             };
             
-            await _context.Students.AddAsync(student);
-            await _context.SaveChangesAsync();
+            await context.Students.AddAsync(student);
+            await context.SaveChangesAsync();
         }
     }
     

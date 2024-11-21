@@ -1,0 +1,26 @@
+﻿@using DbWebApplication.Enum
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DbWebApplication.ViewModels.ListSubcestsAndIDViewModel
+
+<form asp-action="DetermineSessionSubjects" method="post">
+    <ul>
+
+        <div class="form-group mb-3">
+            <select asp-for="Faculty" asp-items="@Html.GetEnumSelectList<Faculty>()" class="form-control form-select">
+            </select>
+            <span asp-validation-for="Faculty" class="text-danger"></span>
+        </div>
+        
+        @for (int i = 0; i < Model.Subjects.Count; i++)
+        {
+            <li>
+                <input type="checkbox" asp-for="Subjects[i].IsSelected"/>
+                <label>@Model.Subjects[i].Name</label>
+                <input type="hidden" asp-for="Subjects[i].Id"/>
+                <input type="hidden" asp-for="Subjects[i].Name"/>
+            </li>
+        }
+    </ul>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
