@@ -14,7 +14,6 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<LabModel> LabWorks { get; set; }
     public DbSet<StudentModel> Students { get; set; }
     public DbSet<LabWorkGradeModel> LabWorkGrade { get; set; }
-    
     public DbSet<SessionSubjects> SessionSubjects { get; set; }
     public DbSet<SessionGrades> SessionGrades { get; set; }
 

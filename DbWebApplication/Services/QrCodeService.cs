@@ -38,35 +38,7 @@ namespace DbWebApplication.Services
                 return result2.Text;
             }
             
-            /*Bitmap bitmap = ByteToBitmap(byteArray);
-            bitmap = PreprocessImage(bitmap);
-
-            var reader = new BarcodeReader
-            {
-                AutoRotate = true, // Автоматичне обертання для покращення розпізнавання
-                TryInverted = true // Спроба розпізнати інвертований код
-            };
-
-            var result = reader.Decode(bitmap);*/
             return result.Text;
-            
-            /*Bitmap bitmap;
-            using (var stream = imageFile.OpenReadStream())
-            {
-                bitmap = new Bitmap(stream);
-            }
-
-            bitmap = PreprocessImage(bitmap);
-            // Створення екземпляру BarcodeReader для зчитування QR-коду
-            var barcodeReader = new BarcodeReader
-            {
-                AutoRotate = true,    // Автоматичне обертання зображення
-                TryInverted = true    // Спроба розпізнати інвертований код
-            };
-
-            // Розшифрування зображення
-            var result = barcodeReader.Decode(bitmap);
-            return result.Text;*/
         }
 
         private static Bitmap ByteToBitmap(byte[] byteArray) 

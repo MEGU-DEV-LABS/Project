@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "pnP386M+9Rk=",
+  "dgSpecHash": "+jgz2zqy1JY=",
   "success": true,
   "projectFilePath": "C:\\Users\\popug\\my space\\ASPLessons\\DbWebApplication\\DbWebApplication\\DbWebApplication.csproj",
   "expectedPackageFiles": [
@@ -179,10 +179,10 @@
     "C:\\Users\\popug\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\popug\\.nuget\\packages\\zxing.net\\0.16.9\\zxing.net.0.16.9.nupkg.sha512",
     "C:\\Users\\popug\\.nuget\\packages\\zxing.net.bindings.windows.compatibility\\0.16.12\\zxing.net.bindings.windows.compatibility.0.16.12.nupkg.sha512",
-    "C:\\Users\\popug\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.7\\microsoft.netcore.app.ref.8.0.7.nupkg.sha512",
-    "C:\\Users\\popug\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.7\\microsoft.windowsdesktop.app.ref.8.0.7.nupkg.sha512",
-    "C:\\Users\\popug\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.7\\microsoft.aspnetcore.app.ref.8.0.7.nupkg.sha512",
-    "C:\\Users\\popug\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.7\\microsoft.netcore.app.host.win-x64.8.0.7.nupkg.sha512"
+    "C:\\Users\\popug\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.13\\microsoft.netcore.app.ref.8.0.13.nupkg.sha512",
+    "C:\\Users\\popug\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.13\\microsoft.windowsdesktop.app.ref.8.0.13.nupkg.sha512",
+    "C:\\Users\\popug\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.13\\microsoft.aspnetcore.app.ref.8.0.13.nupkg.sha512",
+    "C:\\Users\\popug\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.13\\microsoft.netcore.app.host.win-x64.8.0.13.nupkg.sha512"
   ],
   "logs": []
 }
