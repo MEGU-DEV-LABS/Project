@@ -27,7 +27,7 @@ public class StudentService(AppDbContext context, UserManager<ApplicationUser> u
                     s.FirstName == model.FirstName &&
                     s.LastName == model.LastName &&
                     s.FatherName == model.FatherName &&
-                    s.Faculty == model.Faculty)
+                    s. == model.Faculty)
                 .FirstOrDefaultAsync() as T;
         }
         else if (typeof(T) == typeof(SubjectModel))
@@ -130,7 +130,7 @@ public class StudentService(AppDbContext context, UserManager<ApplicationUser> u
         var studentGradesViewModel = new StudentGradesViewModel
         {
             StudentFullName = $"{student.LastName} {student.FirstName} {student.FatherName}",
-            Faculty = student.Faculty.GetDisplayName(),
+            Faculty = student.SpecialtyModel.GetDisplayName(),
             Subjects = subjects
         };
 
@@ -207,7 +207,7 @@ public class StudentService(AppDbContext context, UserManager<ApplicationUser> u
     public async Task AddSubjectToSessionAsync(ListSubcestsAndIDViewModel model)
     {
         var existingSessionSubjects = await context.SessionSubjects
-            .Where(s => s.Faculty == model.Faculty)
+            .Where(s => s.SpecialtyModel == model.Faculty)
             .ToListAsync();
 
         var newSubjects = model.Subjects
@@ -218,7 +218,7 @@ public class StudentService(AppDbContext context, UserManager<ApplicationUser> u
         {
             var sessionSubjects = newSubjects.Select(s => new SessionSubjects
             {
-                Faculty = model.Faculty,
+                SpecialtyModel = model.Faculty,
                 Subject = s.Name
             }).ToList();
 
@@ -229,7 +229,7 @@ public class StudentService(AppDbContext context, UserManager<ApplicationUser> u
         }
 
         var students = await context.Students
-            .Where(s => s.Faculty == model.Faculty)
+            .Where(s => s.SpecialtyModel == model.Faculty)
             .ToListAsync();
 
         var existingGrades = await context.SessionGrades
@@ -282,7 +282,7 @@ public class StudentService(AppDbContext context, UserManager<ApplicationUser> u
     public async Task<SessionSubjects> GetSessionSubjectAsync(string subjectName, Faculty faculty)
     {
         return await context.SessionSubjects
-            .FirstOrDefaultAsync(s => s.Subject == subjectName && s.Faculty == faculty);
+            .FirstOrDefaultAsync(s => s.Subject == subjectName && s.SpecialtyModel == faculty);
     }
 
 

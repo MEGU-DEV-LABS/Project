@@ -11,7 +11,7 @@ public class SubjectModel
     public byte[] ImageData { get; set; }
     [NotMapped] 
     public string ImageBase64 { get; set; }
-    public ICollection<StudentModel> Students { get; set; } = new List<StudentModel>();
     
+    public ICollection<SpecialtyModel> Specialties { get; set; } = new List<SpecialtyModel>();
     public ICollection<LabModel> LabWorks { get; set; } = new List<LabModel>();
 }

@@ -185,7 +185,7 @@ public class AdminController(
 
         foreach (var sub in list)
         {
-            var sessionSubject = await studentService.GetSessionSubjectAsync(sub.SessionSubject, student.Faculty);
+            var sessionSubject = await studentService.GetSessionSubjectAsync(sub.SessionSubject, student.SpecialtyModel);
 
             if (sessionSubject != null)
             {

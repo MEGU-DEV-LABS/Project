@@ -177,7 +177,7 @@ namespace DbWebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Faculty")
+                    b.Property<int>("SpecialtyModel")
                         .HasColumnType("int");
 
                     b.Property<string>("Subject")
@@ -201,7 +201,7 @@ namespace DbWebApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Faculty")
+                    b.Property<int>("SpecialtyModel")
                         .HasColumnType("int");
 
                     b.Property<string>("FatherName")

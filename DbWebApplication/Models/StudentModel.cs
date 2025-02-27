@@ -6,16 +6,17 @@ namespace DbWebApplication.Models;
 
 public class StudentModel
 {
-
     [Key]
     public int Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string FatherName { get; set; }
-    [ForeignKey("ApplicationUser")] // ForeignKey для акаунта
+    [ForeignKey("ApplicationUser")]
     public string ApplicationUserId { get; set; }
-    public ApplicationUser ApplicationUser { get; set; } // Навігаційна властивість
-    public Faculty Faculty { get; set; }
+    public ApplicationUser ApplicationUser { get; set; }
+    public int SpecialtyId { get; set; }
+    public SpecialtyModel Specialty { get; set; }
+    //QR Code fields
     public Guid? QrCodeToken { get; set; }
     public DateTime? TokenDateExpired { get; set; }
     

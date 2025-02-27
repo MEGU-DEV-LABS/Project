@@ -4,7 +4,7 @@
 
 @*<h1>Студент: @Model.FirstName</h1>
 <h1>@Model.LastName</h1>
-<p>Факультет: @Model.Faculty</p>
+<p>Факультет: @Model.SpecialtyModel</p>
 <div class="marks__inner">
     @foreach (var subject in Model.Subjects)
     {
@@ -21,7 +21,7 @@
                 <h3 class="marks__title">items</h3>
 
                 $1$<h1>Оцінки студента: @Model.StudentFullName</h1>#1#
-                <p>Факультет: @Model.Faculty</p>
+                <p>Факультет: @Model.SpecialtyModel</p>
                 <div class="marks__inner">
                     @foreach (var subject in Model.Subjects)
                     {

@@ -11,7 +11,7 @@ namespace DbWebApplication.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<int>(
-                name: "Faculty",
+                name: "SpecialtyModel",
                 table: "SessionSubjects",
                 type: "int",
                 nullable: false,
@@ -23,7 +23,7 @@ namespace DbWebApplication.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Faculty",
+                name: "SpecialtyModel",
                 table: "SessionSubjects",
                 type: "nvarchar(max)",
                 nullable: false,

@@ -38,6 +38,6 @@ public class RegisterViewModel
     [Display(Name = "Role")]
     public Role Role { get; set; }
 
-    [Display(Name = "Faculty")]
+    [Display(Name = "SpecialtyModel")]
     public Faculty Faculty { get; set; }
 }
