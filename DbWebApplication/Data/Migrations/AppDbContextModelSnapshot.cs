@@ -22,24 +22,21 @@ namespace DbWebApplication.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DbWebApplication.ApplicationUser", b =>
+            modelBuilder.Entity("DbWebApplication.Models.AppUserModel", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                    b.Property<string>("FatherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -49,50 +46,51 @@ namespace DbWebApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                    b.Property<int?>("StudentId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                    b.ToTable("AppUsers");
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@gmail.com",
+                            FatherName = "Admin",
+                            FirstName = "Admin",
+                            LastName = "Admin",
+                            Password = "$2a$11$FUFiZlbGihZVrEt1Xt/g5uzA9iyWoxY/YokpNNniD4zdaFBlMBlOe",
+                            Role = 2
+                        });
+                });
 
-                    b.ToTable("AspNetUsers", (string)null);
+            modelBuilder.Entity("DbWebApplication.Models.FacultyModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Faculties");
                 });
 
             modelBuilder.Entity("DbWebApplication.Models.LabModel", b =>
@@ -125,8 +123,8 @@ namespace DbWebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LabWorkGradeID"));
 
-                    b.Property<float>("GradeValue")
-                        .HasColumnType("real");
+                    b.Property<int>("GradeValue")
+                        .HasColumnType("int");
 
                     b.Property<int>("LabWorkID")
                         .HasColumnType("int");
@@ -143,6 +141,56 @@ namespace DbWebApplication.Migrations
                     b.ToTable("LabWorkGrade");
                 });
 
+            modelBuilder.Entity("DbWebApplication.Models.Pair", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LessonNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScheduleDayId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScheduleDayId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("Pair");
+                });
+
+            modelBuilder.Entity("DbWebApplication.Models.ScheduleDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Day")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SpecialtyScheduleForWeekId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SpecialtyScheduleForWeekId");
+
+                    b.ToTable("ScheduleDay");
+                });
+
             modelBuilder.Entity("DbWebApplication.Models.SessionGrades", b =>
                 {
                     b.Property<int>("Id")
@@ -151,10 +199,13 @@ namespace DbWebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("Grade")
-                        .HasColumnType("real");
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
 
                     b.Property<int>("SessionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SessionSubjectsId")
                         .HasColumnType("int");
 
                     b.Property<int>("StudentId")
@@ -162,7 +213,7 @@ namespace DbWebApplication.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SessionId");
+                    b.HasIndex("SessionSubjectsId");
 
                     b.HasIndex("StudentId");
 
@@ -177,16 +228,60 @@ namespace DbWebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("SpecialtyModel")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("Subject")
+                    b.Property<string>("SubjectName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("SessionSubjects");
+                });
+
+            modelBuilder.Entity("DbWebApplication.Models.SpecialtyModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("FacultyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FacultyId");
+
+                    b.ToTable("Specialties");
+                });
+
+            modelBuilder.Entity("DbWebApplication.Models.SpecialtyScheduleForWeek", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("SpecialtyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartOfWeek")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SpecialtyId");
+
+                    b.ToTable("SpecialtyScheduleForWeeks");
                 });
 
             modelBuilder.Entity("DbWebApplication.Models.StudentModel", b =>
@@ -197,11 +292,7 @@ namespace DbWebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("SpecialtyModel")
+                    b.Property<int>("AppUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("FatherName")
@@ -219,12 +310,18 @@ namespace DbWebApplication.Migrations
                     b.Property<Guid?>("QrCodeToken")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("SpecialtyId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("TokenDateExpired")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("AppUserId")
+                        .IsUnique();
+
+                    b.HasIndex("SpecialtyId");
 
                     b.ToTable("Students");
                 });
@@ -241,179 +338,48 @@ namespace DbWebApplication.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<int?>("StudentModelId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SubjectName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SubjectID");
 
+                    b.HasIndex("StudentModelId");
+
                     b.ToTable("Subjects");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("SessionSubjectsSpecialtyModel", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "2276bcf0-f16a-4786-8a26-a3cc41dfd27d",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "ce3f1c01-b0a3-47f7-8872-8502cac17779",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("SessionSubjectsId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("SpecialtiesId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.HasKey("SessionSubjectsId", "SpecialtiesId");
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("SpecialtiesId");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("SessionSubjectsSpecialtyModel");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("SpecialtyModelSubjectModel", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("StudentModelSubjectModel", b =>
-                {
-                    b.Property<int>("StudentsId")
+                    b.Property<int>("SpecialtiesId")
                         .HasColumnType("int");
 
                     b.Property<int>("SubjectsSubjectID")
                         .HasColumnType("int");
 
-                    b.HasKey("StudentsId", "SubjectsSubjectID");
+                    b.HasKey("SpecialtiesId", "SubjectsSubjectID");
 
                     b.HasIndex("SubjectsSubjectID");
 
-                    b.ToTable("StudentSubject", (string)null);
+                    b.ToTable("SpecialtyModelSubjectModel");
                 });
 
             modelBuilder.Entity("DbWebApplication.Models.LabModel", b =>
@@ -446,11 +412,41 @@ namespace DbWebApplication.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("DbWebApplication.Models.Pair", b =>
+                {
+                    b.HasOne("DbWebApplication.Models.ScheduleDay", "ScheduleDay")
+                        .WithMany("Pairs")
+                        .HasForeignKey("ScheduleDayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DbWebApplication.Models.SubjectModel", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ScheduleDay");
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("DbWebApplication.Models.ScheduleDay", b =>
+                {
+                    b.HasOne("DbWebApplication.Models.SpecialtyScheduleForWeek", "SpecialtyScheduleForWeek")
+                        .WithMany("Days")
+                        .HasForeignKey("SpecialtyScheduleForWeekId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SpecialtyScheduleForWeek");
+                });
+
             modelBuilder.Entity("DbWebApplication.Models.SessionGrades", b =>
                 {
-                    b.HasOne("DbWebApplication.Models.SessionSubjects", "SessionSubjects")
-                        .WithMany()
-                        .HasForeignKey("SessionId")
+                    b.HasOne("DbWebApplication.Models.SessionSubjects", "SessionSubject")
+                        .WithMany("SessionGrades")
+                        .HasForeignKey("SessionSubjectsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -460,78 +456,79 @@ namespace DbWebApplication.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("SessionSubjects");
+                    b.Navigation("SessionSubject");
 
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("DbWebApplication.Models.SpecialtyModel", b =>
+                {
+                    b.HasOne("DbWebApplication.Models.FacultyModel", "Faculty")
+                        .WithMany("Specialties")
+                        .HasForeignKey("FacultyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Faculty");
+                });
+
+            modelBuilder.Entity("DbWebApplication.Models.SpecialtyScheduleForWeek", b =>
+                {
+                    b.HasOne("DbWebApplication.Models.SpecialtyModel", "Specialty")
+                        .WithMany("SpecialtyScheduleForWeeks")
+                        .HasForeignKey("SpecialtyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Specialty");
+                });
+
             modelBuilder.Entity("DbWebApplication.Models.StudentModel", b =>
                 {
-                    b.HasOne("DbWebApplication.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
+                    b.HasOne("DbWebApplication.Models.AppUserModel", "AppUser")
+                        .WithOne("Student")
+                        .HasForeignKey("DbWebApplication.Models.StudentModel", "AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.HasOne("DbWebApplication.Models.SpecialtyModel", "Specialty")
+                        .WithMany("Students")
+                        .HasForeignKey("SpecialtyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Specialty");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("DbWebApplication.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("DbWebApplication.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DbWebApplication.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("DbWebApplication.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("StudentModelSubjectModel", b =>
+            modelBuilder.Entity("DbWebApplication.Models.SubjectModel", b =>
                 {
                     b.HasOne("DbWebApplication.Models.StudentModel", null)
+                        .WithMany("Subjects")
+                        .HasForeignKey("StudentModelId");
+                });
+
+            modelBuilder.Entity("SessionSubjectsSpecialtyModel", b =>
+                {
+                    b.HasOne("DbWebApplication.Models.SessionSubjects", null)
                         .WithMany()
-                        .HasForeignKey("StudentsId")
+                        .HasForeignKey("SessionSubjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DbWebApplication.Models.SpecialtyModel", null)
+                        .WithMany()
+                        .HasForeignKey("SpecialtiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SpecialtyModelSubjectModel", b =>
+                {
+                    b.HasOne("DbWebApplication.Models.SpecialtyModel", null)
+                        .WithMany()
+                        .HasForeignKey("SpecialtiesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -542,14 +539,48 @@ namespace DbWebApplication.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DbWebApplication.Models.AppUserModel", b =>
+                {
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("DbWebApplication.Models.FacultyModel", b =>
+                {
+                    b.Navigation("Specialties");
+                });
+
             modelBuilder.Entity("DbWebApplication.Models.LabModel", b =>
                 {
                     b.Navigation("LabWorkGrades");
                 });
 
+            modelBuilder.Entity("DbWebApplication.Models.ScheduleDay", b =>
+                {
+                    b.Navigation("Pairs");
+                });
+
+            modelBuilder.Entity("DbWebApplication.Models.SessionSubjects", b =>
+                {
+                    b.Navigation("SessionGrades");
+                });
+
+            modelBuilder.Entity("DbWebApplication.Models.SpecialtyModel", b =>
+                {
+                    b.Navigation("SpecialtyScheduleForWeeks");
+
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("DbWebApplication.Models.SpecialtyScheduleForWeek", b =>
+                {
+                    b.Navigation("Days");
+                });
+
             modelBuilder.Entity("DbWebApplication.Models.StudentModel", b =>
                 {
                     b.Navigation("SessionGrades");
+
+                    b.Navigation("Subjects");
                 });
 
             modelBuilder.Entity("DbWebApplication.Models.SubjectModel", b =>

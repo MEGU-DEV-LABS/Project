@@ -8,4 +8,6 @@ public enum Role
     User = 1,
     [Display(Name = "Адмін")]
     Admin = 2,
+    [Display(Name = "Викладач")]
+    Teacher = 3
 }

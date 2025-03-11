@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DbWebApplication.Services;
 
-public class UserService(AppDbContext context, UserManager<ApplicationUser> userManager)
+public class UserService(AppDbContext context, UserManager<AppUserModel> userManager)
 {
     public ApplicationUser CreateUser()
     {
@@ -24,7 +24,7 @@ public class UserService(AppDbContext context, UserManager<ApplicationUser> user
         }
     }
     
-    public async Task GetRolesAsync(ApplicationUser user, RegisterViewModel model)
+    public async Task GetRolesAsync(AppUserModel user, RegisterViewModel model)
     {
         if (model.Role == Role.Admin)
         {

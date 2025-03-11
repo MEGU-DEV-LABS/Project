@@ -89,24 +89,7 @@ public class StudentService(AppDbContext context, UserManager<ApplicationUser> u
         return await student;
     }
 
-    public async Task AddQrTokenToStudentAsync(StudentModel student)
-    {
-        Guid token = System.Guid.NewGuid();
-
-        student.QrCodeToken = token;
-        DateTime now = DateTime.Now;
-        DateTime time = now.AddDays(7);
-        student.TokenDateExpired = time;
-        context.Students.Update(student);
-        await context.SaveChangesAsync();
-    }
-
-    public async Task<StudentModel> GetStudentByQrToken(string token)
-    {
-        Guid studentToken = Guid.Parse(token);
-        return await context.Students.FirstOrDefaultAsync(s =>
-            s.QrCodeToken == studentToken && s.TokenDateExpired >= DateTime.Now);
-    }
+   //
 
     public async Task<StudentGradesViewModel> PrepareStudentGradesViewModelAsync(string userId)
     {
@@ -143,7 +126,7 @@ public class StudentService(AppDbContext context, UserManager<ApplicationUser> u
             .Include(s => s.Subjects)
             .ThenInclude(sub => sub.LabWorks)
             .ThenInclude(lab => lab.LabWorkGrades)
-            .FirstOrDefaultAsync(s => s.ApplicationUserId == userId);
+            /*.FirstOrDefaultAsync(s => s.AppUserId == userId)*/;
 
         var subjectSearch = student.Subjects.FirstOrDefault(s => s.SubjectID == subjectId);
 
@@ -284,7 +267,4 @@ public class StudentService(AppDbContext context, UserManager<ApplicationUser> u
         return await context.SessionSubjects
             .FirstOrDefaultAsync(s => s.Subject == subjectName && s.SpecialtyModel == faculty);
     }
-
-
-
 }

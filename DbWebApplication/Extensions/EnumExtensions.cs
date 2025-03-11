@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using DbWebApplication.Enum;
 
@@ -15,3 +16,4 @@ public static class EnumExtensions
             .GetName() ?? enumValue.ToString();
     }
 }
+*/

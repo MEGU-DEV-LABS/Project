@@ -1,11 +1,11 @@
 ﻿using DbWebApplication.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using DbWebApplication.Providers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace DbWebApplication.Data;
 
-public class AppDbContext : IdentityDbContext<ApplicationUser>
+public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
@@ -19,34 +19,38 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<SpecialtyModel> Specialties { get; set; }
     public DbSet<SpecialtyScheduleForWeek> SpecialtyScheduleForWeeks { get; set; }
     public DbSet<FacultyModel> Faculties { get; set; }
+    public DbSet<AppUserModel> AppUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        var adminRoleId = "2276bcf0-f16a-4786-8a26-a3cc41dfd27d";
-        var userRoleId = "ce3f1c01-b0a3-47f7-8872-8502cac17779";
-        var teacherRoleId = "f4e95dc8-e69f-4e45-a904-ded224a7b9e3";
         
-        modelBuilder.Entity<IdentityRole>().HasData(
-            new IdentityRole
+        //Initializing initial admin user
+        modelBuilder.Entity<AppUserModel>().HasData(
+            new AppUserModel
             {
-                Id = adminRoleId,
-                Name = "Admin",
-                NormalizedName = "ADMIN"
-            },
-            new IdentityRole
-            {
-                Id = userRoleId,
-                Name = "User",
-                NormalizedName = "USER"
-            },
-            new IdentityRole
-            {
-                Id = teacherRoleId,
-                Name = "Teacher",
-                NormalizedName = "TEACHER"
+                Id = 1,
+                FirstName = "Admin",
+                LastName = "Admin",
+                FatherName = "Admin",
+                Email = "admin@gmail.com",
+                Password = BCrypt.Net.BCrypt.EnhancedHashPassword("12345Aa@"),
+                Role = Enum.Role.Admin
             }
         );
+        
+        modelBuilder.Entity<AppUserModel>()
+            .HasOne(a => a.Student)
+            .WithOne(s => s.AppUser)
+            .HasForeignKey<StudentModel>(s => s.AppUserId);
+        
+
+        base.OnModelCreating(modelBuilder);
+    }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.ConfigureWarnings(warnings =>
+            warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
     }
 }

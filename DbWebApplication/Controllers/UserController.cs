@@ -9,49 +9,21 @@ using ZXing.QrCode;
 namespace DbWebApplication;
 
 public class UserController(
-    ILogger<HomeController> logger,
+    ILogger<UserController> logger,
     StudentService studentService,
-    SignInManager<ApplicationUser> signInManager,
-    QrCodeService qrCodeService,
-    UserManager<ApplicationUser> userManager)
+    QrCodeService qrCodeService)
     : Controller
 {
-    [HttpGet]
-    public async Task<IActionResult> Login()
+    private int GetUserId()
     {
-        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Login(LoginViewModel model)
-    {
-        if (ModelState.IsValid)
+        if (HttpContext.Items["UserId"] is int userId)
         {
-            var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            if (result.IsLockedOut)
-            {
-                return RedirectToPage("./Lockout");
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-            }
+            return userId;
         }
-        return View(model);
+
+        throw new UnauthorizedAccessException("UserId not found in the context.");
     }
     
-    [HttpPost]
-    public async Task<IActionResult> Logout()
-    {
-        await signInManager.SignOutAsync();
-        logger.LogInformation("User logged out.");
-        return RedirectToAction("Index", "Home");
-    }
 
     [HttpGet]
     public IActionResult LoginWithQrCode()
@@ -73,7 +45,7 @@ public class UserController(
         }
         
         await signInManager.SignInAsync(user, isPersistent: false);
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index", "Student");
     }
     
 }

@@ -9,8 +9,8 @@ public static class AddServicesToProgram
 {
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
-        services.AddScoped<StudentService>();
-        services.AddScoped<UserService>();
+        /*services.AddScoped<StudentService>();
+        services.AddScoped<UserService>();*/
         services.AddScoped<QrCodeService>();
         return services;
     }
@@ -39,14 +39,6 @@ public static class AddServicesToProgram
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         });
-        return services;
-    }
-    
-    public static IServiceCollection AddIdentity(this IServiceCollection services)
-    {
-        services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<AppDbContext>();
         return services;
     }
 }

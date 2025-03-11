@@ -1,18 +1,11 @@
-using DbWebApplication;
-using DbWebApplication.Data;
 using DbWebApplication.Extensions;
-using DbWebApplication.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using ZXing.QrCode;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddCustomServices()
     .AddStandardServices()
     .AddAppCookie()
-    .AddDbContext(builder.Configuration)
-    .AddIdentity();
+    .AddDbContext(builder.Configuration);
 
 var app = builder.Build();
 
@@ -28,7 +21,7 @@ app.UseAuthentication();
 app.UseAuthorization();  
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Student}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();

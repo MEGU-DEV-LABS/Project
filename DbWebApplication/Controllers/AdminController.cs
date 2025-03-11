@@ -1,39 +1,37 @@
-﻿using System.Text;
-using System.Text.Encodings.Web;
-using DbWebApplication.Data;
+﻿using DbWebApplication.Data;
 using DbWebApplication.Enum;
 using DbWebApplication.Models;
 using DbWebApplication.Services;
 using DbWebApplication.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
-using Python.Runtime;
-
 
 namespace DbWebApplication.Controllers;
 
 [Authorize(Roles = "Admin")]
 public class AdminController(
     StudentService studentService,
-    UserManager<ApplicationUser> userManager,
+    UserManager<AppUserModel> userManager,
     AppDbContext context,
-    SignInManager<ApplicationUser> signInManager,
+    SignInManager<AppUserModel> signInManager,
     UserService userService,
     QrCodeService qrCodeService)
     : Controller
 {
+    private int GetUserId()
+    {
+        if (HttpContext.Items["UserId"] is int userId)
+        {
+            return userId;
+        }
+
+        throw new UnauthorizedAccessException("UserId not found in the context.");
+    }
+    
     [HttpGet]
     public async Task<IActionResult> AdminPanel()
     {
-        if (!User.Identity.IsAuthenticated)
-        {
-            return RedirectToAction("Login", "User");
-        }
-
         var user = await userManager.GetUserAsync(User);
 
         if (user == null)
@@ -50,6 +48,7 @@ public class AdminController(
         return View(model);
     }
     
+    //Registration of new user
     [HttpGet]
     public IActionResult Register()
     {
@@ -84,6 +83,7 @@ public class AdminController(
             return View(new RegisterViewModel());
     }
     
+    //Admin adding subject
     [HttpGet]
     public IActionResult Create()
     {
@@ -110,7 +110,8 @@ public class AdminController(
         }
         return View(model);
     }
-
+    
+    //Admin enrolls students to subjects
     [HttpGet]
     public async Task<IActionResult> EnrollStudent()
     {
@@ -137,6 +138,7 @@ public class AdminController(
         return View(model);
     }
 
+    //Admin receives list of students
     [HttpGet]
     public IActionResult StudentsList()
     {
@@ -155,6 +157,7 @@ public class AdminController(
         return File(res, "image/png", $"{s.LastName}.png");
     }
 
+    //Admin adding session subjects
     [HttpGet]
     public async Task<IActionResult> DetermineSessionSubjects()
     {
@@ -169,6 +172,7 @@ public class AdminController(
         return RedirectToAction("StudentsList");
     }
 
+    //Admin edits student's zalikovka
     [HttpGet]
     public async Task<IActionResult> EditStudentZalikovka(int Id)
     {
@@ -200,4 +204,25 @@ public class AdminController(
 
         return RedirectToAction("StudentsList");
     }
+    
+    //TODO: Implement the following methods and determine their affiliation to this controller
+    //Admin deletes student
+    
+    //Admin edits user's information
+    
+    //Admin creates faculty
+    
+    //Admin creates specialty
+    
+    //Admin edits faculty
+    
+    //Admin edits specialty
+    
+    //Admin deletes faculty
+    
+    //Admin deletes specialty
+    
+    //Admin creates new schedule
+    
+    //Admin edits schedule
 }

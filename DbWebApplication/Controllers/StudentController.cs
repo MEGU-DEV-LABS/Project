@@ -1,27 +1,23 @@
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Reflection;
-using DbWebApplication.Data;
 using Microsoft.AspNetCore.Mvc;
-using DbWebApplication.Models;
-using DbWebApplication.Repository;
 using DbWebApplication.Services;
 using DbWebApplication.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-
 
 namespace DbWebApplication.Controllers;
 
-public class HomeController(
-    ILogger<HomeController> logger,
-    StudentService studentService,
-    UserManager<ApplicationUser> userManager,
-    AppDbContext context)
+public class StudentController(
+    StudentService studentService)
     : Controller
 {
+    private int GetUserId()
+    {
+        if (HttpContext.Items["UserId"] is int userId)
+        {
+            return userId;
+        }
+
+        throw new UnauthorizedAccessException("UserId not found in the context.");
+    }
 
     [Authorize(Roles = "User, Admin")]
     public async Task<IActionResult> Index()

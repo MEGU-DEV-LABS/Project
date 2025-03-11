@@ -12,14 +12,10 @@ public class StudentModel
     public string LastName { get; set; }
     public string FatherName { get; set; }
     [ForeignKey("ApplicationUser")]
-    public string ApplicationUserId { get; set; }
-    public ApplicationUser ApplicationUser { get; set; }
+    public int AppUserId { get; set; }
+    public AppUserModel AppUser { get; set; }
     public int SpecialtyId { get; set; }
     public SpecialtyModel Specialty { get; set; }
-    //QR Code fields
-    public Guid? QrCodeToken { get; set; }
-    public DateTime? TokenDateExpired { get; set; }
-    
     public ICollection<SubjectModel> Subjects { get; set; } = new List<SubjectModel>();
     public ICollection<SessionGrades> SessionGrades { get; set; } = new List<SessionGrades>();
 }

@@ -1,4 +1,4 @@
-﻿using DbWebApplication.Enum;
+﻿/*using DbWebApplication.Enum;
 
 namespace DbWebApplication.ViewModels;
 
@@ -11,4 +11,4 @@ public class EnrollStudentViewModel
     public string SubjectName { get; set; }
     
     public List<string> Subjects { get; set; } = new List<string>();
-}
+}*/
