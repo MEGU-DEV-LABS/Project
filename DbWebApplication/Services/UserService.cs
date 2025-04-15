@@ -1,25 +1,25 @@
 ﻿using DbWebApplication.Data;
 using DbWebApplication.Models;
 using DbWebApplication.ViewModels;
-using DbWebApplication.Data;
 using DbWebApplication.Enum;
-using DbWebApplication.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace DbWebApplication.Services;
 
-public class UserService(AppDbContext context, UserManager<AppUserModel> userManager)
+public class UserService(AppDbContext context,
+    UserManager<AppUserModel> userManager,
+    IHttpContextAccessor httpContextAccessor)
 {
-    public ApplicationUser CreateUser()
+    public AppUserModel CreateUser()
     {
         try
         {
-            return Activator.CreateInstance<ApplicationUser>();
+            return Activator.CreateInstance<AppUserModel>();
         }
         catch
         {
-            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
-                                                $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(AppUserModel)}'. " +
+                                                $"Ensure that '{nameof(AppUserModel)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                                                 $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
         }
     }
@@ -36,7 +36,7 @@ public class UserService(AppDbContext context, UserManager<AppUserModel> userMan
         }
     }
     
-    public async Task CreateStudentIfNotAdmin(RegisterViewModel model, ApplicationUser user)
+    public async Task CreateStudentIfNotAdmin(RegisterViewModel model, AppUserModel user)
     {
         if (model.Role != Role.Admin)
         {
@@ -45,7 +45,7 @@ public class UserService(AppDbContext context, UserManager<AppUserModel> userMan
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 FatherName = model.FatherName,
-                ApplicationUserId = user.Id 
+                Id = user.Id 
             };
             
             await context.Students.AddAsync(student);
@@ -53,5 +53,13 @@ public class UserService(AppDbContext context, UserManager<AppUserModel> userMan
         }
     }
     
-    
+    public int GetUserId()
+    {
+        if (httpContextAccessor.HttpContext?.Items["UserId"] is int userId)
+        {
+            return userId;
+        }
+
+        throw new UnauthorizedAccessException("UserId not found in the context.");
+    }
 }

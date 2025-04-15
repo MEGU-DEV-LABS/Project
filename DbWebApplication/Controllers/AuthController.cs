@@ -1,6 +1,7 @@
 ﻿using DbWebApplication.Interfaces;
 using DbWebApplication.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DbWebApplication.Controllers;
 
@@ -8,7 +9,6 @@ namespace DbWebApplication.Controllers;
 public class AuthController(
     ILogger<AuthController> logger,
     IAuthService authService,
-    StudentService studentService,
     QrCodeService qrCodeService
 ) : Controller
 {
@@ -42,17 +42,17 @@ public class AuthController(
     [HttpPost("loginWithQrCode")]
     public async Task<IActionResult> LoginWithQrCode(IFormFile  file)
     {
-        byte[] imageData = await studentService.ConvertImageToByteArrayAsync(file);
+        byte[] imageData = await qrCodeService.ConvertImageToByteArrayAsync(file);
         var qrText = await qrCodeService.ReadQRCode(imageData);
-        var student = await studentService.GetStudentByQrToken(qrText);
-        var token = await authService.Login(student.Email, student.Password);
-        HttpContext.Response.Cookies.Append("tastkook", token);
-    
-        if (user == null)
+        var token = await authService.LoginWithQr(qrText);
+        if (token.IsNullOrEmpty())
         {
             ModelState.AddModelError(string.Empty, "Користувача не знайдено.");
             return View();
         }
+        HttpContext.Response.Cookies.Append("tastkook", token);
+    
+        
         
         await signInManager.SignInAsync(user, isPersistent: false);
         return RedirectToAction("Index", "Student");

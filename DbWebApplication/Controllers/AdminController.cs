@@ -1,5 +1,6 @@
 ﻿using DbWebApplication.Data;
 using DbWebApplication.Enum;
+using DbWebApplication.Interfaces;
 using DbWebApplication.Models;
 using DbWebApplication.Services;
 using DbWebApplication.ViewModels;
@@ -16,7 +17,8 @@ public class AdminController(
     AppDbContext context,
     SignInManager<AppUserModel> signInManager,
     UserService userService,
-    QrCodeService qrCodeService)
+    QrCodeService qrCodeService,
+    IAuthService authService)
     : Controller
 {
     private int GetUserId()
@@ -66,7 +68,6 @@ public class AdminController(
 
                 user.FirstName = model.FirstName;
                 user.LastName = model.LastName;
-                user.UserName = model.Email;
                 user.Email = model.Email;
                 
                 var result = await userManager.CreateAsync(user, model.Password);
@@ -96,7 +97,7 @@ public class AdminController(
     {
         if (ModelState.IsValid)
         {
-            byte[] imageData = await studentService.ConvertImageToByteArrayAsync(model.imageFile); 
+            byte[] imageData = await qrCodeService.ConvertImageToByteArrayAsync(model.imageFile); 
 
             var subject = new SubjectModel()
             {
@@ -125,8 +126,8 @@ public class AdminController(
     [HttpPost]
     public async Task<IActionResult> EnrollStudent(EnrollStudentViewModel model)
     {
-        var student = await studentService.GetByIdAsync<StudentModel>(model);
-        var subject = await studentService.GetByIdAsync<SubjectModel>(model);
+        var student = await studentService.GetStudentByModelAsync(model);
+        var subject = await studentService.GetSubjectByModelAsync(model);
 
         if (student == null && subject == null)
         {
@@ -150,8 +151,8 @@ public class AdminController(
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> StudentsList(int Id)
     {
-        var s = await studentService.GetStudentByIdAsync(Id);
-        await studentService.AddQrTokenToStudentAsync(s);
+        var s = await studentService.GetUserByStudentId(Id);
+        await authService.AddQrTokenToUserAsync(s);
         var qr = qrCodeService.GenerateQRCode(s.QrCodeToken);
         var res = qrCodeService.ConvertBitmapToByteArray(qr);
         return File(res, "image/png", $"{s.LastName}.png");
@@ -189,7 +190,7 @@ public class AdminController(
 
         foreach (var sub in list)
         {
-            var sessionSubject = await studentService.GetSessionSubjectAsync(sub.SessionSubject, student.SpecialtyModel);
+            var sessionSubject = await studentService.GetSessionSubjectAsync(sub.SessionSubject, student.Specialty);
 
             if (sessionSubject != null)
             {

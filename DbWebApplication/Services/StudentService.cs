@@ -1,45 +1,32 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Linq.Expressions;
-using System.Reflection;
-using DbWebApplication.Data;
-using DbWebApplication.Enum;
-using DbWebApplication.Models;
-using DbWebApplication;
-using DbWebApplication.Data;
-using DbWebApplication.Extensions;
+﻿using DbWebApplication.Data;
 using DbWebApplication.Models;
 using DbWebApplication.ViewModels;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DbWebApplication.Services;
 
-public class StudentService(AppDbContext context, UserManager<ApplicationUser> userManager)
+public class StudentService(AppDbContext context)
 {
-    private readonly UserManager<ApplicationUser> _userManager = userManager;
 
-    public async Task<T> GetByIdAsync<T>(EnrollStudentViewModel model) where T : class
+    public async Task<StudentModel> GetStudentByModelAsync(EnrollStudentViewModel model)
     {
-        if (typeof(T) == typeof(StudentModel))
-        {
-            return await context.Set<StudentModel>()
-                .Where(s =>
-                    s.FirstName == model.FirstName &&
-                    s.LastName == model.LastName &&
-                    s.FatherName == model.FatherName &&
-                    s. == model.Faculty)
-                .FirstOrDefaultAsync() as T;
-        }
-        else if (typeof(T) == typeof(SubjectModel))
-        {
-            return await context.Set<SubjectModel>()
-                .Where(s => s.SubjectName == model.SubjectName)
-                .FirstOrDefaultAsync() as T;
-        }
-
-        return null;
+        return await context.Students
+            .FirstOrDefaultAsync(s => 
+                s.FirstName == model.FirstName &&
+                s.LastName == model.LastName &&
+                s.FatherName == model.FatherName &&
+                s.Specialty == model.SpecialtyModel
+            );
     }
 
+    public async Task<SubjectModel> GetSubjectByModelAsync(EnrollStudentViewModel model)
+    {
+        return await context.Subjects.
+            FirstOrDefaultAsync(s => 
+                s.SubjectName == model.SubjectName
+            );
+    }
+    
     public async Task AddStudentToSubjectAsync(int studentId, int subjectId)
     {
         var student = await context.Students
@@ -66,38 +53,32 @@ public class StudentService(AppDbContext context, UserManager<ApplicationUser> u
         return context.Subjects.Select(s => s.SubjectName).ToList();
     }
 
-    public async Task<byte[]> ConvertImageToByteArrayAsync(IFormFile imageFile)
-    {
-        if (imageFile == null || imageFile.Length == 0)
-        {
-            return null;
-        }
-
-        using (var memoryStream = new MemoryStream())
-        {
-            await imageFile.CopyToAsync(memoryStream);
-            return memoryStream.ToArray();
-        }
-    }
-
-    public async Task<StudentModel> GetStudentByUserId(string applicationUserId)
+    public async Task<StudentModel> GetStudentByUserId(int applicationUserId)
     {
         var student = context.Students
             .Include(s => s.Subjects)
-            .FirstOrDefaultAsync(s => s.ApplicationUserId == applicationUserId);
+            .FirstOrDefaultAsync(s => s.AppUserId == applicationUserId);
 
         return await student;
+    }
+    
+    public async Task<AppUserModel> GetUserByStudentId(int studentId)
+    {
+        var user = await context.AppUsers
+            .FirstOrDefaultAsync(u => u.StudentId == studentId);
+
+        return user;
     }
 
    //
 
-    public async Task<StudentGradesViewModel> PrepareStudentGradesViewModelAsync(string userId)
+    public async Task<StudentGradesViewModel> PrepareStudentGradesViewModelAsync(int userId)
     {
         var student = await context.Students
             .Include(s => s.Subjects)
             .ThenInclude(sub => sub.LabWorks)
             .ThenInclude(lab => lab.LabWorkGrades)
-            .FirstOrDefaultAsync(s => s.ApplicationUserId == userId);
+            .FirstOrDefaultAsync(s => s.AppUserId == userId);
 
         var subjects = student.Subjects.Select(sub => new SubjectOverallViewModel
         {
@@ -262,9 +243,12 @@ public class StudentService(AppDbContext context, UserManager<ApplicationUser> u
         await context.SaveChangesAsync();
     }
     
-    public async Task<SessionSubjects> GetSessionSubjectAsync(string subjectName, Faculty faculty)
+    public async Task<SessionSubjects> GetSessionSubjectAsync(string subjectName, SpecialtyModel specialty)
     {
-        return await context.SessionSubjects
-            .FirstOrDefaultAsync(s => s.Subject == subjectName && s.SpecialtyModel == faculty);
+        return await context.Specialties
+                .Include(s => s.SessionSubjects)
+                .Where(s => s.SessionSubjects.Any(ss => ss.SubjectName == subjectName))
+                .SelectMany(s => s.SessionSubjects)
+                .FirstOrDefaultAsync(ss => ss.SubjectName == subjectName);
     }
 }

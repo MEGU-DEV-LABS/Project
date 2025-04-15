@@ -1,5 +1,4 @@
-﻿/*
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using DbWebApplication.Enum;
 
 namespace DbWebApplication.ViewModels;
@@ -42,4 +41,3 @@ public class RegisterViewModel
     [Display(Name = "SpecialtyModel")]
     public Faculty Faculty { get; set; }
 }
-*/

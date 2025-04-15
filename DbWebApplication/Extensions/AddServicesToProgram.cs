@@ -9,8 +9,8 @@ public static class AddServicesToProgram
 {
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
-        /*services.AddScoped<StudentService>();
-        services.AddScoped<UserService>();*/
+        services.AddScoped<StudentService>();
+        services.AddScoped<UserService>();
         services.AddScoped<QrCodeService>();
         return services;
     }
@@ -33,7 +33,7 @@ public static class AddServicesToProgram
         return services;
     }
     
-    public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDbCustomContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<AppDbContext>(options =>
         {

@@ -90,6 +90,20 @@ namespace DbWebApplication.Services
                 return stream.ToArray(); 
             }
         }
+        
+        public async Task<byte[]> ConvertImageToByteArrayAsync(IFormFile imageFile)
+        {
+            if (imageFile == null || imageFile.Length == 0)
+            {
+                return null;
+            }
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await imageFile.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
 
     }
 }

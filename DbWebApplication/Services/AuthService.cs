@@ -1,15 +1,17 @@
 ﻿using DbWebApplication.Data;
 using DbWebApplication.Interfaces;
 using DbWebApplication.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DbWebApplication.Services;
 
 public class AuthService(
     IJwtProvider jwtProvider,
     IPasswordHasher passwordHasher,
-    IUserRepository userRepository) : IAuthService
+    IUserRepository userRepository,
+    AppDbContext context) : IAuthService
 {
-    public async Task Register(string firstName, string fatherName, string lastName,
+    public async Task<string> Register(string firstName, string fatherName, string lastName,
         string email, string password, string phoneNumber)
     {
         var emailProb = await userRepository.GetUserByEmail(email);
@@ -28,6 +30,13 @@ public class AuthService(
             PhoneNumber = phoneNumber
         };
         await userRepository.Create(model);
+        var user = await userRepository.GetUserByEmail(email);
+        if (user != null)
+        {
+            throw new Exception("No such user.");
+        }
+        var token = jwtProvider.Created(user);
+        return token;
     }
 
     public async Task<string> Login(string email, string password)
@@ -43,9 +52,9 @@ public class AuthService(
     }
     
     //для входу через QR-код
-    public async Task<string> Login(string qrToken)
+    public async Task<string> LoginWithQr(string qrToken)
     {
-        var user = await userRepository.GetUserByEmail(email);
+        var user = await GetUserByQrToken(qrToken);
         if (user != null)
         {
             throw new Exception("Email is already in use.");
@@ -56,19 +65,18 @@ public class AuthService(
     
     public async Task AddQrTokenToUserAsync(AppUserModel user)
     {
-        Guid token = System.Guid.NewGuid();
+        Guid token = Guid.NewGuid();
         user.QrCodeToken = token;
         DateTime now = DateTime.Now;
         DateTime time = now.AddDays(7);
         user.TokenDateExpired = time;
-        await userRepository.Update(user.Id,
-            user.FirstName, user.FatherName,
-            user.LastName, user.Password, user.Email);
+        await userRepository.UpdateOneProperty(user.Id, s => s.QrCodeToken, token);
+        await userRepository.UpdateOneProperty(user.Id, s => s.TokenDateExpired, time);
     }
 
-    public async Task<AppUserModel> GetUserByQrToken(string token)
+    private async Task<AppUserModel> GetUserByQrToken(string token)
     {
-        int userToken = int.Parse(token);
+        Guid userToken = Guid.Parse(token);
         return await context.AppUsers.FirstOrDefaultAsync(s =>
             s.QrCodeToken == userToken && s.TokenDateExpired >= DateTime.Now);
     }

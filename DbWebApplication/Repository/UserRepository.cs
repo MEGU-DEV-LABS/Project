@@ -1,4 +1,6 @@
-﻿using DbWebApplication.Data;
+﻿using System.Linq.Expressions;
+using DbWebApplication.Data;
+using DbWebApplication.Enum;
 using DbWebApplication.Interfaces;
 using DbWebApplication.Models;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +28,7 @@ public class UserRepository(AppDbContext context) : IUserRepository
 
 
     public async Task Update(int id, string firstName, string fatherName, string lastName,
-        string passwordHash, string email)
+        string passwordHash, string email, string phoneNumber, Role role, Guid qrToken, DateTime tokenDateExpired)
     {
         await context.AppUsers
             .Where(b => b.Id == id)
@@ -39,7 +41,18 @@ public class UserRepository(AppDbContext context) : IUserRepository
                 .SetProperty(p=> p.PhoneNumber, phoneNumber)
                 .SetProperty(p=> p.Role, role)
                 .SetProperty(p=> p.QrCodeToken, qrToken)
+                .SetProperty(p=> p.TokenDateExpired, tokenDateExpired)
             );
+    }
+
+    public async Task UpdateOneProperty<TProperty>(
+        int id,
+        Func<AppUserModel, TProperty> propertyExpression,
+        TProperty newValue)
+    {
+        await context.AppUsers
+            .Where(u => u.Id == id)
+            .ExecuteUpdateAsync(set => set.SetProperty(propertyExpression, newValue));
     }
 
     public async Task Delete(int id)
@@ -63,6 +76,15 @@ public class UserRepository(AppDbContext context) : IUserRepository
         var user = await context.AppUsers
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Email == email);
+        
+        return user; 
+    }
+    
+    public async Task<AppUserModel?> GetUserByStudentId(int id)
+    {
+        var user = await context.AppUsers
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.StudentId == id);
         
         return user; 
     }
