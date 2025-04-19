@@ -44,6 +44,7 @@
 
     <ItemGroup>
       <Folder Include="Domain\" />
+      <Folder Include="Domain\ViewModels\" />
       <Folder Include="x\css\" />
       <Folder Include="x\js\" />
     </ItemGroup>
