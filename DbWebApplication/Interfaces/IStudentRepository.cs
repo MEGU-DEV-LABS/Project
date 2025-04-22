@@ -10,4 +10,5 @@ public interface IStudentRepository
     Task UpdateAsync(StudentModel student);
     Task DeleteAsync(int id);
     Task<StudentModel?> GetByAppUserIdAsync(int appUserId);
+    //Task SaveChangesAsync();
 }

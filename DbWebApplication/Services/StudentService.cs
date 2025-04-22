@@ -1,78 +1,46 @@
 ﻿using DbWebApplication.Data;
+using DbWebApplication.Interfaces;
 using DbWebApplication.Models;
 using DbWebApplication.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace DbWebApplication.Services;
 
-public class StudentService(AppDbContext context)
+public class StudentService(IStudentRepository studentRepository, ISubjectRepository subjectRepository, IUserRepository userRepository)
 {
-
-    public async Task<StudentModel> GetStudentByModelAsync(EnrollStudentViewModel model)
-    {
-        return await context.Students
-            .FirstOrDefaultAsync(s => 
-                s.FirstName == model.FirstName &&
-                s.LastName == model.LastName &&
-                s.FatherName == model.FatherName &&
-                s.Specialty == model.SpecialtyModel
-            );
-    }
-
-    public async Task<SubjectModel> GetSubjectByModelAsync(EnrollStudentViewModel model)
-    {
-        return await context.Subjects.
-            FirstOrDefaultAsync(s => 
-                s.SubjectName == model.SubjectName
-            );
-    }
     
     public async Task AddStudentToSubjectAsync(int studentId, int subjectId)
     {
-        var student = await context.Students
-            .Include(s => s.Subjects)
-            .FirstOrDefaultAsync(s => s.Id == studentId);
+        var student = await studentRepository.GetByIdAsync(studentId);
 
-        var subject = await context.Subjects
-            .FirstOrDefaultAsync(s => s.SubjectID == subjectId);
+        var subject = await subjectRepository.GetByIdAsync(subjectId);
 
         if (student == null || subject == null)
         {
             throw new Exception("Student or Subject not found.");
         }
 
-        if (!student.Subjects.Contains(subject))
+        if (!student.Subjects.Any(s => s.SubjectID == subjectId))
         {
             student.Subjects.Add(subject);
-            await context.SaveChangesAsync();
+            await studentRepository.UpdateAsync(student);
         }
     }
 
     public List<string> GetSubjectsNames()
     {
-        return context.Subjects.Select(s => s.SubjectName).ToList();
+        return subjectRepository.GetAllAsync().Result.Select(s => s.SubjectName).ToList();
     }
 
     public async Task<StudentModel> GetStudentByUserId(int applicationUserId)
     {
-        var student = context.Students
-            .Include(s => s.Subjects)
-            .FirstOrDefaultAsync(s => s.AppUserId == applicationUserId);
-
+        var student = studentRepository.GetByAppUserIdAsync(applicationUserId)
+            
         return await student;
     }
     
-    public async Task<AppUserModel> GetUserByStudentId(int studentId)
-    {
-        var user = await context.AppUsers
-            .FirstOrDefaultAsync(u => u.StudentId == studentId);
-
-        return user;
-    }
-
-   //
-
-    public async Task<StudentGradesViewModel> PrepareStudentGradesViewModelAsync(int userId)
+    //TODO: ПЕРЕРОБИТИ ОЦІНКИ ЗА ВСІ ПРЕДМЕТИ
+    /*public async Task<StudentGradesViewModel> PrepareStudentGradesViewModelAsync(int userId)
     {
         var student = await context.Students
             .Include(s => s.Subjects)
@@ -99,15 +67,17 @@ public class StudentService(AppDbContext context)
         };
 
         return studentGradesViewModel;
-    }
+    }*/
 
-    public async Task<SubjectDetailsViewModel> PrepareSubjectGradesViewModelAsync(int subjectId, string userId)
+    
+    //TODO: ПЕРЕРОБИТИ ОЦІНКИ ЗА ПРЕДМЕТ
+    /*public async Task<SubjectDetailsViewModel> PrepareSubjectGradesViewModelAsync(int subjectId, string userId)
     {
         var student = await context.Students
             .Include(s => s.Subjects)
             .ThenInclude(sub => sub.LabWorks)
             .ThenInclude(lab => lab.LabWorkGrades)
-            /*.FirstOrDefaultAsync(s => s.AppUserId == userId)*/;
+            //.FirstOrDefaultAsync(s => s.AppUserId == userId);
 
         var subjectSearch = student.Subjects.FirstOrDefault(s => s.SubjectID == subjectId);
 
@@ -129,9 +99,11 @@ public class StudentService(AppDbContext context)
         };
 
         return subjectDetailsViewModel;
-    }
+    }*/
 
-    public async Task<List<SessionSubjectViewModel>> PrepareSessionSubjectViewModelAsync(StudentModel student)
+    
+    //TODO: ЗРОБИТИ
+    /*public async Task<List<SessionSubjectViewModel>> PrepareSessionSubjectViewModelAsync(StudentModel student)
     {
         if (student == null)
         {
@@ -150,7 +122,7 @@ public class StudentService(AppDbContext context)
         }).ToList();
 
         return sessionSubjectViewModels;
-    }
+    }*/
 
     public async Task<ListSubcestsAndIDViewModel> GetSubjectsWithIdAsync()
     {
@@ -226,29 +198,28 @@ public class StudentService(AppDbContext context)
 
     public async Task<StudentModel> GetStudentByIdAsync(int studentId)
     {
-        var student = await context.Students.FirstOrDefaultAsync(s => s.Id == studentId);
-        return student;
+        var student = await studentRepository.GetByIdAsync(studentId);
+        if (student == null)
+        {
+            throw new NullReferenceException("Student not found.");
+        }
+        return  student;
     }
     
-    public async Task<SessionGrades> GetSessionGradeAsync(int studentId, int sessionId)
-    {
-        return await context.SessionGrades
-            .FirstOrDefaultAsync(g => g.StudentId == studentId && g.SessionId == sessionId);
-    }
     
-    public async Task UpdateSessionGradeAsync(SessionGrades grade, int newGrade)
+    /*public async Task UpdateSessionGradeAsync(SessionGrades grade, int newGrade)
     {
         grade.Grade = newGrade;
         context.SessionGrades.Update(grade);
         await context.SaveChangesAsync();
-    }
+    }*/
     
-    public async Task<SessionSubjects> GetSessionSubjectAsync(string subjectName, SpecialtyModel specialty)
+    /*public async Task<SessionSubjects> GetSessionSubjectAsync(string subjectName, SpecialtyModel specialty)
     {
         return await context.Specialties
                 .Include(s => s.SessionSubjects)
                 .Where(s => s.SessionSubjects.Any(ss => ss.SubjectName == subjectName))
                 .SelectMany(s => s.SessionSubjects)
                 .FirstOrDefaultAsync(ss => ss.SubjectName == subjectName);
-    }
+    }*/
 }
