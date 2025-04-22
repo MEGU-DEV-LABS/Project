@@ -2,13 +2,15 @@
 using DbWebApplication.Models;
 using DbWebApplication.ViewModels;
 using DbWebApplication.Enum;
+using DbWebApplication.Repository;
 using Microsoft.AspNetCore.Identity;
 
 namespace DbWebApplication.Services;
 
 public class UserService(AppDbContext context,
     UserManager<AppUserModel> userManager,
-    IHttpContextAccessor httpContextAccessor)
+    IHttpContextAccessor httpContextAccessor,
+    UserRepository userRepository)
 {
     public AppUserModel CreateUser()
     {
@@ -61,5 +63,17 @@ public class UserService(AppDbContext context,
         }
 
         throw new UnauthorizedAccessException("UserId not found in the context.");
+    }
+    
+    public async Task<AppUserModel> GetUser(int userId)
+    {
+        var user = await userRepository.GetUserByIdAsync(userId);
+
+        if (user == null)
+        {
+            throw new NullReferenceException("User not found");
+        }
+        
+        return user;
     }
 }

@@ -11,39 +11,27 @@ public class UserRepository(AppDbContext context) : IUserRepository
 {
     public async Task Create(AppUserModel userModel)
     {
-        var user = new AppUserModel
-        {
-            FirstName = userModel.FirstName,
-            FatherName = userModel.FatherName,
-            LastName = userModel.LastName,
-            Email = userModel.Email,
-            Password = userModel.Password,
-            Role = userModel.Role,
-            PhoneNumber = userModel.PhoneNumber
-        };
-        
-        await context.AppUsers.AddAsync(user);
+        await context.AppUsers.AddAsync(userModel);
         await context.SaveChangesAsync();
     }
-
-
-    public async Task Update(int id, string firstName, string fatherName, string lastName,
-        string passwordHash, string email, string phoneNumber, Role role, Guid qrToken, DateTime tokenDateExpired)
+    
+    public async Task Update(AppUserModel userModel)
     {
         await context.AppUsers
-            .Where(b => b.Id == id)
+            .Where(b => b.Id == userModel.Id)
             .ExecuteUpdateAsync(s => s
-                .SetProperty(p => p.FirstName, firstName)
-                .SetProperty(p => p.FatherName, fatherName)
-                .SetProperty(p => p.LastName, lastName)
-                .SetProperty(p => p.Password, passwordHash)
-                .SetProperty(p => p.Email, email)
-                .SetProperty(p=> p.PhoneNumber, phoneNumber)
-                .SetProperty(p=> p.Role, role)
-                .SetProperty(p=> p.QrCodeToken, qrToken)
-                .SetProperty(p=> p.TokenDateExpired, tokenDateExpired)
+                .SetProperty(p => p.FirstName, userModel.FirstName)
+                .SetProperty(p => p.FatherName, userModel.FatherName)
+                .SetProperty(p => p.LastName, userModel.LastName)
+                .SetProperty(p => p.Password, userModel.Password)
+                .SetProperty(p => p.Email, userModel.Email)
+                .SetProperty(p => p.PhoneNumber, userModel.PhoneNumber)
+                .SetProperty(p => p.Role, userModel.Role)
+                .SetProperty(p => p.QrCodeToken, userModel.QrCodeToken)
+                .SetProperty(p => p.TokenDateExpired, userModel.TokenDateExpired)
             );
     }
+
 
     public async Task UpdateOneProperty<TProperty>(
         int id,
@@ -69,6 +57,13 @@ public class UserRepository(AppDbContext context) : IUserRepository
             .ToListAsync();
 
         return users;
+    }
+
+    public async Task<AppUserModel?> GetUserByIdAsync(int id)
+    {
+        return await context.AppUsers
+            .Include(u => u.Student)
+            .FirstOrDefaultAsync(u => u.Id == id);
     }
 
     public async Task<AppUserModel?> GetUserByEmail(string email)

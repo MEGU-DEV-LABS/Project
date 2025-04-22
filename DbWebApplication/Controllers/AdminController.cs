@@ -3,7 +3,6 @@ using DbWebApplication.Enum;
 using DbWebApplication.Interfaces;
 using DbWebApplication.Models;
 using DbWebApplication.Services;
-using DbWebApplication.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -54,7 +53,7 @@ public class AdminController(
     [HttpGet]
     public IActionResult Register()
     {
-        return View(new RegisterViewModel());
+        return View();
     }
     
     [HttpPost]
@@ -81,7 +80,7 @@ public class AdminController(
                 }
             }
             
-            return View(new RegisterViewModel());
+            return View();
     }
     
     //Admin adding subject

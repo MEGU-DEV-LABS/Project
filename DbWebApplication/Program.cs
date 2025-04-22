@@ -5,7 +5,9 @@ builder.Services
     .AddCustomServices()
     .AddStandardServices()
     .AddAppCookie()
-    .AddDbCustomContext(builder.Configuration);
+    .AddDbCustomContext(builder.Configuration)
+    .AddRepositories()
+    .AddAuthExtensions();
 
 var app = builder.Build();
 

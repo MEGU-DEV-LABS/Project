@@ -1,4 +1,7 @@
 ﻿using DbWebApplication.Data;
+using DbWebApplication.Interfaces;
+using DbWebApplication.Providers;
+using DbWebApplication.Repository;
 using DbWebApplication.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +42,23 @@ public static class AddServicesToProgram
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         });
+        return services;
+    }
+    
+    public static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IStudentRepository, StudentRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IFacultyRepository, FacultyRepository>();
+        services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
+        services.AddScoped<ISubjectRepository, SubjectRepository>();
+        return services;
+    }
+    
+    public static IServiceCollection AddAuthExtensions(this IServiceCollection services)
+    {
+        services.AddScoped<IJwtProvider, JwtTokenProvider>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
         return services;
     }
 }
