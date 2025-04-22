@@ -25,7 +25,7 @@ public class SpecialtyController(
         var userId = GetUserId();
         
         var user = await userService.GetUser(userId);
-        var specialties = await specialtyService.GetSpecialtiesAsync();
+        var specialties = await specialtyService.GetSpecialties();
 
         var model = new Specialty_Index_ViewModel
         {
@@ -36,18 +36,53 @@ public class SpecialtyController(
         return View(model);
     }
 
-    public async Task<IActionResult> CreateSpecialty()
+    public async Task<IActionResult> ShowSpecialty(int id)
     {
-        
-        return View();
+        var specialty = await specialtyService.GetSpecialtyById(id);
+
+        return View(specialty);
+    }
+
+    public async Task<IActionResult> CreateSpecialty(int id)
+    {
+        return View(id);
     }
     
-    public async Task CreateSpecialty(SpecialtyModel model)
+    public async Task<IActionResult> CreateSpecialty(SpecialtyModel model)
     {
         if (!ModelState.IsValid)
         {
-            model.FacultyId
+            return View(model);
         }
-        specialtyService.AddSpecialtyAsync(model);
+        
+        await specialtyService.AddSpecialty(model);
+        
+        return RedirectToAction("Index"); 
+    }
+    
+    public async Task<IActionResult> EditSpecialty(int id)
+    {
+        var specialty = await specialtyService.GetSpecialtyById(id);
+        
+        return View(specialty);
+    }
+
+    public async Task<IActionResult> EditSpecialty(SpecialtyModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+        
+        await specialtyService.UpdateSpecialty(model);
+        
+        return RedirectToAction("Index");
+    }
+
+    public async Task<IActionResult> DeleteSpecialty(int id)
+    {
+        await specialtyService.DeleteSpecialty(id);
+        
+        return RedirectToAction("Index"); 
     }
 }

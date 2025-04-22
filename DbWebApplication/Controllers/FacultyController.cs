@@ -38,6 +38,7 @@ public class FacultyController(
     public async Task<IActionResult> ShowFaculty(int id)
     {
         var faculty = facultyService.GetFacultyById(id);
+        
         return View(faculty);
     }
 }

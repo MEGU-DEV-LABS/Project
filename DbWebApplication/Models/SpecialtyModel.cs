@@ -1,10 +1,14 @@
-﻿namespace DbWebApplication.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DbWebApplication.Models;
 
 public class SpecialtyModel
 {
     public int Id { get; set; }
+    [Required(ErrorMessage = "Вкажіть назву спеціальності")]
     public string Name { get; set; }
     
+    [Required(ErrorMessage = "Не вказано номер факультету")]
     public int FacultyId { get; set; }
     public FacultyModel Faculty { get; set; }
     
