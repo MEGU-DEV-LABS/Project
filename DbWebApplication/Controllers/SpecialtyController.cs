@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DbWebApplication.Controllers;
 
+[Route("specialty")]
 public class SpecialtyController(
     SpecialtyService specialtyService,
      UserService userService): Controller
@@ -20,6 +21,7 @@ public class SpecialtyController(
         throw new UnauthorizedAccessException("UserId not found in the context.");
     }
 
+    [HttpGet("specialties")]
     public async Task<IActionResult> Index()
     {
         var userId = GetUserId();
@@ -36,6 +38,7 @@ public class SpecialtyController(
         return View(model);
     }
 
+    [HttpGet("specialty/{id}")]
     public async Task<IActionResult> ShowSpecialty(int id)
     {
         var specialty = await specialtyService.GetSpecialtyById(id);
@@ -43,11 +46,13 @@ public class SpecialtyController(
         return View(specialty);
     }
 
+    [HttpGet("/create")]
     public async Task<IActionResult> CreateSpecialty(int id)
     {
         return View(id);
     }
     
+    [HttpPost("/create")]
     public async Task<IActionResult> CreateSpecialty(SpecialtyModel model)
     {
         if (!ModelState.IsValid)
@@ -60,6 +65,7 @@ public class SpecialtyController(
         return RedirectToAction("Index"); 
     }
     
+    [HttpGet("edit/{id}")]
     public async Task<IActionResult> EditSpecialty(int id)
     {
         var specialty = await specialtyService.GetSpecialtyById(id);
@@ -67,6 +73,7 @@ public class SpecialtyController(
         return View(specialty);
     }
 
+    [HttpPost("edit/{id}")]
     public async Task<IActionResult> EditSpecialty(SpecialtyModel model)
     {
         if (!ModelState.IsValid)
@@ -79,6 +86,7 @@ public class SpecialtyController(
         return RedirectToAction("Index");
     }
 
+    [HttpPost("delete/{id}")]
     public async Task<IActionResult> DeleteSpecialty(int id)
     {
         await specialtyService.DeleteSpecialty(id);

@@ -1,5 +1,6 @@
 ﻿using DbWebApplication.Interfaces;
 using DbWebApplication.Services;
+using DbWebApplication.ViewModels.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -51,10 +52,7 @@ public class AuthController(
             return View();
         }
         HttpContext.Response.Cookies.Append("tastkook", token);
-    
-        
-        
-        await signInManager.SignInAsync(user, isPersistent: false);
+
         return RedirectToAction("Index", "Student");
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DbWebApplication.Controllers;
 
+[Route("faculty")]
 public class FacultyController(
     FacultyService facultyService,
     UserService userService
@@ -19,6 +20,7 @@ public class FacultyController(
         throw new UnauthorizedAccessException("UserId not found in the context.");
     }
     
+    [HttpGet("faculties")]
     public async Task<IActionResult> Index()
     {
         var userId = GetUserId();
@@ -35,6 +37,7 @@ public class FacultyController(
         return View(model);
     }
 
+    [HttpGet("showFaculty/{id}")]
     public async Task<IActionResult> ShowFaculty(int id)
     {
         var faculty = facultyService.GetFacultyById(id);
