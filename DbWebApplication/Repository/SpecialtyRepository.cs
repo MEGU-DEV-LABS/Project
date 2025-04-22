@@ -33,13 +33,13 @@ public class SpecialtyRepository(AppDbContext context) : ISpecialtyRepository
         return specialty;
     }
 
-    public async Task CreateAsync(SpecialtyModel specialty)
+    public async Task Create(SpecialtyModel specialty)
     {
         await context.Specialties.AddAsync(specialty);
         await context.SaveChangesAsync();
     }
     //TODO: Add Collections update
-    public async Task UpdateAsync(SpecialtyModel specialty)
+    public async Task Update(SpecialtyModel specialty)
     {
         await context.Specialties
             .Where(s => s.Id == specialty.Id)
@@ -49,7 +49,7 @@ public class SpecialtyRepository(AppDbContext context) : ISpecialtyRepository
             );
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task Delete(int id)
     {
         await context.Specialties
             .Where(b => b.Id == id)

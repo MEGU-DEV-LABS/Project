@@ -12,6 +12,8 @@ public static class AddServicesToProgram
 {
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
+        services.AddScoped<FacultyService>();
+        services.AddScoped<SpecialtyService>();
         services.AddScoped<StudentService>();
         services.AddScoped<UserService>();
         services.AddScoped<QrCodeService>();

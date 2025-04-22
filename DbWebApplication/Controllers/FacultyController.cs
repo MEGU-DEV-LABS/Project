@@ -24,7 +24,7 @@ public class FacultyController(
         var userId = GetUserId();
         
         var user = await userService.GetUser(userId);
-        var faculties = await facultyService.GetAllFacultiesAsync();
+        var faculties = await facultyService.GetAllFaculties();
 
         var model = new Faculty_Index_ViewModel
         {
@@ -33,5 +33,11 @@ public class FacultyController(
         };
         
         return View(model);
+    }
+
+    public async Task<IActionResult> ShowFaculty(int id)
+    {
+        var faculty = facultyService.GetFacultyById(id);
+        return View(faculty);
     }
 }
