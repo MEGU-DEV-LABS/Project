@@ -1,12 +1,15 @@
+using DbWebApplication.Models;
 using Microsoft.AspNetCore.Mvc;
 using DbWebApplication.Services;
 using DbWebApplication.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace DbWebApplication.Controllers;
 
 public class StudentController(
-    StudentService studentService)
+    StudentService studentService,
+    UserManager<AppUserModel> userManager)
     : Controller
 {
     private int GetUserId()
@@ -50,7 +53,7 @@ public class StudentController(
         
     }
 
-    [HttpGet]
+    /*[HttpGet]
     public async Task<IActionResult> SubjectDetails(int id)
     {
         var user = await userManager.GetUserAsync(User);
@@ -63,7 +66,7 @@ public class StudentController(
         var subject = await studentService.PrepareSubjectGradesViewModelAsync(id, user.Id);
 
         return View(subject);
-    }
+    }*/
 
     [HttpGet]
     public async Task<IActionResult> StudentZalikovka()

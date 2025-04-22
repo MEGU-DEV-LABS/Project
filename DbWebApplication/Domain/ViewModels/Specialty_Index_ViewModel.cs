@@ -2,9 +2,9 @@
 
 namespace DbWebApplication.ViewModels;
 
-public class Faculty_Index_ViewModel
+public class Specialty_Index_ViewModel
 {
     public AppUserModel User { get; set; }
     
-    public List<FacultyModel> Faculties { get; set; }
+    public List<SpecialtyModel> Specialties { get; set; }
 }

@@ -43,10 +43,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Domain\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\AccessDenied.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ConfirmEmail.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ConfirmEmailChange.cshtml" />
@@ -87,6 +83,12 @@
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ValidationScriptsPartial.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewImports.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewStart.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Student\GradesOfStudent.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Student\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Student\StudentZalikovka.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Student\SubjectDetails.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\User\Login.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\User\LoginWithQrCode.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -99,6 +101,10 @@
 
     <ItemGroup>
       <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Domain\Requests\" />
     </ItemGroup>
 
 </Project>
