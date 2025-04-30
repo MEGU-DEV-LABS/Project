@@ -1,8 +1,8 @@
+using DbWebApplication.Enum;
+using DbWebApplication.Extensions;
 using DbWebApplication.Models;
 using Microsoft.AspNetCore.Mvc;
 using DbWebApplication.Services;
-using DbWebApplication.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace DbWebApplication.Controllers;
@@ -22,9 +22,12 @@ public class StudentController(
         throw new UnauthorizedAccessException("UserId not found in the context.");
     }
 
-    [Authorize(Roles = "User, Admin")]
+    [AuthorizeByRole(Role.Admin, Role.User)]
     public async Task<IActionResult> Index()
     {
+        /*
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        */
         if(User.IsInRole("Admin"))
         {
             return RedirectToAction("AdminPanel", "Admin");
@@ -53,7 +56,7 @@ public class StudentController(
         
     }
 
-    /*[HttpGet]
+     /*[HttpGet]
     public async Task<IActionResult> SubjectDetails(int id)
     {
         var user = await userManager.GetUserAsync(User);

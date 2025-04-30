@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using DbWebApplication.Enum;
 using DbWebApplication.Interfaces;
 using DbWebApplication.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -22,7 +23,8 @@ public class JwtTokenProvider(IConfiguration configuration) : IJwtProvider
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Sub, userModel.Email),
             new Claim(JwtRegisteredClaimNames.Email, userModel.Email),
-            new("userId", userModel.Id.ToString())
+            new("userId", userModel.Id.ToString()),
+            new Claim("role", userModel.Role.ToString())
         };
 
         var tokenDescriptor = new SecurityTokenDescriptor

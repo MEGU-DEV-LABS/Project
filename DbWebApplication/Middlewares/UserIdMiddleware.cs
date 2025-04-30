@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace DbWebApplication.Middlewares;
 
@@ -20,11 +21,22 @@ public class UserIdMiddleware
             if (jwtHandler.CanReadToken(token))
             {
                 var jwtToken = jwtHandler.ReadJwtToken(token);
-                var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId");
 
-                if (userIdClaim != null)
+                var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId");
+                var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "role");
+
+                if (userIdClaim != null && roleClaim != null)
                 {
-                    context.Items["UserId"] = int.Parse(userIdClaim.Value);
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, userIdClaim.Value),
+                        new Claim(ClaimTypes.Role, roleClaim.Value),
+                    };
+
+                    var identity = new ClaimsIdentity(claims, "custom");
+                    var principal = new ClaimsPrincipal(identity);
+
+                    context.User = principal; 
                 }
             }
         }

@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DbWebApplication.Services;
 
-public class StudentService(IStudentRepository studentRepository, ISubjectRepository subjectRepository, IUserRepository userRepository)
+public class StudentService(IStudentRepository studentRepository,
+    ISubjectRepository subjectRepository)
 {
     
     public async Task AddStudentToSubjectAsync(int studentId, int subjectId)

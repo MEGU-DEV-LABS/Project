@@ -1,4 +1,6 @@
 using DbWebApplication.Extensions;
+using DbWebApplication.Middlewares;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
@@ -16,6 +18,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+app.UseMiddleware<UserIdMiddleware>();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

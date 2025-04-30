@@ -1,4 +1,6 @@
-﻿using DbWebApplication.Interfaces;
+﻿using System.Security.Claims;
+using DbWebApplication.Enum;
+using DbWebApplication.Interfaces;
 using DbWebApplication.Services;
 using DbWebApplication.ViewModels.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -26,11 +28,12 @@ public class AuthController(
 
         var token = await authService.Login(request.Email, request.Password);
         HttpContext.Response.Cookies.Append("tastkook", token);
-        return Ok();
+        
+        return RedirectToAction("Redirect");
     }
     
     [HttpPost]
-    public async Task<IActionResult> Logout()
+    public IActionResult Logout()
     {
         HttpContext.Response.Cookies.Delete("tastkook");
         logger.LogInformation("User logged out.");
@@ -53,6 +56,25 @@ public class AuthController(
         }
         HttpContext.Response.Cookies.Append("tastkook", token);
 
-        return RedirectToAction("Index", "Student");
+        return RedirectToAction("Redirect");
+    }
+    
+    [HttpGet("redirect")]
+    public IActionResult Redirect()
+    {
+        if (User.IsInRole(Role.User.ToString()))
+        {
+            return RedirectToAction("Index", "Student");
+        }
+        else if(User.IsInRole(Role.Admin.ToString()))
+        {
+            return RedirectToAction("AdminPanel", "Admin");
+        }
+        else if (User.IsInRole(Role.Teacher.ToString()))
+        {
+            return RedirectToAction("Index", "Teacher");
+        }
+
+        return RedirectToAction("Login", "Auth");
     }
 }
