@@ -8442,23 +8442,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\maksi\\.nuget\\packages\\": {},
+    "C:\\Users\\popug\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\maksi\\source\\repos\\Project\\DbWebApplication\\DbWebApplication.csproj",
+      "projectUniqueName": "C:\\Users\\popug\\my space\\ASPLessons\\DbWebApplication\\DbWebApplication\\DbWebApplication.csproj",
       "projectName": "DbWebApplication",
-      "projectPath": "C:\\Users\\maksi\\source\\repos\\Project\\DbWebApplication\\DbWebApplication.csproj",
-      "packagesPath": "C:\\Users\\maksi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\maksi\\source\\repos\\Project\\DbWebApplication\\obj\\",
+      "projectPath": "C:\\Users\\popug\\my space\\ASPLessons\\DbWebApplication\\DbWebApplication\\DbWebApplication.csproj",
+      "packagesPath": "C:\\Users\\popug\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\popug\\my space\\ASPLessons\\DbWebApplication\\DbWebApplication\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\maksi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\popug\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -8574,7 +8574,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
