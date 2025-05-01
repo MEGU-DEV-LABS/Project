@@ -10,7 +10,8 @@ namespace DbWebApplication.Services;
 public class UserService(AppDbContext context,
     UserManager<AppUserModel> userManager,
     IHttpContextAccessor httpContextAccessor,
-    UserRepository userRepository)
+    UserRepository userRepository,
+    StudentRepository studentRepository)
 {
     public AppUserModel CreateUser()
     {
@@ -75,5 +76,15 @@ public class UserService(AppDbContext context,
         }
         
         return user;
+    }
+
+    public async Task<StudentModel> GetStudentByUserId(int userId)
+    {
+        var student = await studentRepository.GetByIdAsync(userId);
+        if (student == null)
+        {
+            throw new NullReferenceException("User not found");
+        }
+        return student;
     }
 }

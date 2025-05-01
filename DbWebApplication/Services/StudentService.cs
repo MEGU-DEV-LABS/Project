@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DbWebApplication.Services;
 
-public class StudentService(IStudentRepository studentRepository, ISubjectRepository subjectRepository, IUserRepository userRepository)
+public class StudentService(IStudentRepository studentRepository, ISubjectRepository subjectRepository,
+                            IUserRepository userRepository)
 {
     
     public async Task AddStudentToSubjectAsync(int studentId, int subjectId)
@@ -32,9 +33,11 @@ public class StudentService(IStudentRepository studentRepository, ISubjectReposi
         return subjectRepository.GetAllAsync().Result.Select(s => s.SubjectName).ToList();
     }
 
-    public async Task<StudentModel> GetStudentByUserId(int applicationUserId)
+    public async Task<StudentModel> GetStudentByUserId(int applicationUserId) //зроблено
     {
-        var student = studentRepository.GetByAppUserIdAsync(applicationUserId)
+        var student = studentRepository.GetByAppUserIdAsync(applicationUserId);
+        if  (student == null)
+            throw new NullReferenceException("Student not found.");
             
         return await student;
     }
@@ -124,29 +127,23 @@ public class StudentService(IStudentRepository studentRepository, ISubjectReposi
         return sessionSubjectViewModels;
     }*/
 
-    public async Task<ListSubcestsAndIDViewModel> GetSubjectsWithIdAsync()
+    public async Task<List<SubjectModel>> GetSubjectsWithIdAsync(int userId)
     {
-        var subjects = await context.Subjects.Select(s => new DetermineSessionSubjectsViewModel()
+        var student = await studentRepository.GetByIdAsync(userId);
+        if (student == null)
         {
-            Id = s.SubjectID,
-            Name = s.SubjectName,
-            IsSelected = false
-        }).ToListAsync();
+            throw new NullReferenceException("User not found");
+        }
 
-        var response = new ListSubcestsAndIDViewModel()
-        {
-            Subjects = subjects
-        };
-        return response;
+        return student.Subjects.ToList();
     }
-
-    public async Task AddSubjectToSessionAsync(ListSubcestsAndIDViewModel model)
+    public async Task AddSubjectToSessionAsync(SubjectModel model)
     {
         var existingSessionSubjects = await context.SessionSubjects
             .Where(s => s.SpecialtyModel == model.Faculty)
             .ToListAsync();
 
-        var newSubjects = model.Subjects
+        var newSubjects = model.SubjectName
             .Where(s => s.IsSelected && !existingSessionSubjects.Any(es => es.Subject == s.Name))
             .ToList();
 
