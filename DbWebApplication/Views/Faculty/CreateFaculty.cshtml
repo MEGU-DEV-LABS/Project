@@ -1,0 +1,15 @@
+@model DbWebApplication.Models.FacultyModel
+
+<h3 class="role">Новий факультет</h3>
+<form asp-action="CreateFaculty" asp-controller="Faculty" method="post" id="form__new__work">
+    <div class="input-control">
+        <div class="input-control">
+            <label asp-for="Name">Назва</label>
+            <input asp-for="Name" class="form-control" placeholder="Назва" />
+            <span asp-validation-for="Name" class="text-danger error"></span>
+        </div>
+    </div>
+    <div class="btn__con">
+        <button class="login"  type="submit">Cтворити</button>
+    </div>
+</form>    

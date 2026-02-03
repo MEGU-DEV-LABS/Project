@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DbWebApplication.Enum;
 
@@ -16,6 +17,7 @@ public class StudentModel
     public AppUserModel AppUser { get; set; }
     public int SpecialtyId { get; set; }
     public SpecialtyModel Specialty { get; set; }
-    public ICollection<SubjectModel> Subjects { get; set; } = new List<SubjectModel>();
     public ICollection<SessionGrades> SessionGrades { get; set; } = new List<SessionGrades>();
+    public ICollection<LabWorkGradeModel> LabWorkGrades { get; set; } = new List<LabWorkGradeModel>();
+    public ICollection<SubjectGrade> SubjectGrades { get; set; } = new List<SubjectGrade>();
 }

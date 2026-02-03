@@ -1,0 +1,10 @@
+﻿<form class="form__login" asp-action="LoginWithQrCode" asp-controller="Auth" method="post" enctype="multipart/form-data">
+    <div class="upload__file">
+        <label>Qr код</label>
+        <input class="Upload__input" type="file" name="file" id="file"/>
+        <label class="Upload__label" for="file">Завантаження файлу</label>
+    </div>
+    <div class="btn__con">
+        <button type="submit" class="btn btn-primary">Увійти</button>
+    </div>
+</form>

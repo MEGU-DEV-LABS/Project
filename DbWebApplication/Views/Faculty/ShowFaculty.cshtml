@@ -1,0 +1,26 @@
+@model DbWebApplication.Models.FacultyModel
+
+<h3 class="role">@Model.Name</h3>
+
+<div class="admin__panel__inner">
+    <div class="admin__panel__btn__box">
+        <a href="@Url.Action("CreateSpecialty", "Specialty", new { id = @Model.Id })" class="admin__panel__btn__text">Створити спеціальність</a>
+    </div>
+    <div class="admin__panel__btn__box">
+        <a href="@Url.Action("AllSpecialties", "Specialty", new { id = @Model.Id })" class="admin__panel__btn__text">Список спеціальностей</a>
+    </div>
+    <div class="admin__panel__btn__box">
+        <a href="" class="admin__panel__btn__text"></a>
+    </div>
+</div>
+<div class="admin__panel__inner">
+    <div class="admin__panel__btn__box">
+        <a href="" class="admin__panel__btn__text"></a>
+    </div>
+    <div class="admin__panel__btn__box">
+        <a href="" class="admin__panel__btn__text"></a>
+    </div>
+    <div class="admin__panel__btn__box">
+        <a class="admin__panel__btn__text" href="">Розклад</a>
+    </div>
+</div>    

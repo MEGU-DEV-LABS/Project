@@ -29,16 +29,23 @@
 
     <ItemGroup>
       <None Include="wwwroot\css\reset.css" />
-      <None Include="wwwroot\images\icons\inet.svg" />
-      <None Include="wwwroot\images\icons\iueh-logo-gerb.png" />
-      <None Include="wwwroot\images\icons\ps_5.svg" />
-      <None Include="wwwroot\images\icons\Rating.svg" />
-      <None Include="wwwroot\images\icons\Англійська.svg" />
-      <None Include="wwwroot\images\icons\Бази даних.svg" />
-      <None Include="wwwroot\images\icons\Безпека програм.svg" />
-      <None Include="wwwroot\images\icons\Групова динаміка.svg" />
-      <None Include="wwwroot\images\icons\Пайтон.svg" />
-      <None Include="wwwroot\images\icons\Філософія_1.svg" />
+      <None Include="wwwroot\css\style.css" />
+      <None Include="wwwroot\fonts\Jaldi-Bold.woff2" />
+      <None Include="wwwroot\fonts\Jaldi-Regular.woff2" />
+      <None Include="wwwroot\icons\storage-svgrepo-com.svg" />
+      <None Include="wwwroot\images\inet.svg" />
+      <None Include="wwwroot\images\iueh-logo-gerb.png" />
+      <None Include="wwwroot\images\Logo__megu.png" />
+      <None Include="wwwroot\images\Logo__megu__footer.png" />
+      <None Include="wwwroot\images\photo_2024-12-09_16-08-37.jpg" />
+      <None Include="wwwroot\images\ps_5.svg" />
+      <None Include="wwwroot\images\Rating.svg" />
+      <None Include="wwwroot\images\Англійська.svg" />
+      <None Include="wwwroot\images\Бази даних.svg" />
+      <None Include="wwwroot\images\Безпека програм.svg" />
+      <None Include="wwwroot\images\Групова динаміка.svg" />
+      <None Include="wwwroot\images\Пайтон.svg" />
+      <None Include="wwwroot\images\Філософія_1.svg" />
       <None Include="wwwroot\js\main.js" />
     </ItemGroup>
 
@@ -104,7 +111,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Domain\Requests\" />
+      <Folder Include="ui__pages-main\css\" />
+      <Folder Include="ui__pages-main\js\" />
     </ItemGroup>
 
 </Project>

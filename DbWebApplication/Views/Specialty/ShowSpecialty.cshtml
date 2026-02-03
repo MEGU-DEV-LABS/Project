@@ -1,0 +1,29 @@
+﻿@model DbWebApplication.Models.SpecialtyModel
+
+
+
+<h3 class="role">@Model.Name</h3>
+
+<div class="admin__panel__inner">
+    <div class="admin__panel__btn__box">
+        <a href="@Url.Action("CreateSubject", "Subject", new { specialtyId = @Model.Id })" class="admin__panel__btn__text">Створити предмет</a>
+    </div>
+    <div class="admin__panel__btn__box">
+        <a href="@Url.Action("AllSubjects", "Subject")" class="admin__panel__btn__text">Список предметів</a>
+    </div>
+    <div class="admin__panel__btn__box">
+        <a href="@Url.Action("CreateStudyPlan", "Specialty", new { specialtyId = @Model.Id })" class="admin__panel__btn__text">Створити план навчання</a>
+    </div>
+</div>
+<div class="admin__panel__inner">
+    <div class="admin__panel__btn__box">
+        <a href="@Url.Action("GetAllStudents", "User", new { specialtyId = @Model.Id })" class="admin__panel__btn__text">Список студентів</a>
+    </div>
+    <div class="admin__panel__btn__box">
+        <a href="@Url.Action("CreateSession", "Specialty", new { specialtyId = @Model.Id })" class="admin__panel__btn__text">Сесія</a>
+    </div>
+    <div class="admin__panel__btn__box">
+        <a class="admin__panel__btn__text" href="">Розклад</a>
+    </div>
+</div>      
+<!-- відомість -->

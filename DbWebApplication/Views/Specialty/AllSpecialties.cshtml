@@ -1,0 +1,19 @@
+﻿@model List<DbWebApplication.Models.SpecialtyModel>
+
+@if (Model.Any())
+{
+<h3 class="role">@Model.First().Faculty.Name</h3>
+}
+else
+{
+<h3 class="role">Немає спеціальностей</h3>
+}
+
+<div class="work__inner">
+            @foreach (var specialty in Model)
+    {
+    <a href="@Url.Action("ShowSpecialty", "Specialty", new { id = specialty.Id })" class="work__text">
+        @specialty.Name
+    </a>
+    }
+</div>

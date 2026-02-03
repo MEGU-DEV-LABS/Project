@@ -1,4 +1,6 @@
-﻿namespace DbWebApplication.Models;
+﻿using System.Collections.Generic;
+
+namespace DbWebApplication.Models;
 
 public class FacultyModel
 {

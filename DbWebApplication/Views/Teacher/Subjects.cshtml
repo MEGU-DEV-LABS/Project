@@ -1,0 +1,12 @@
+﻿@model List<DbWebApplication.Models.SubjectModel>
+@*<h3 class="role">@ViewBag.SubjectName</h3>*@
+
+<div class="admin__panel__inner">
+    @foreach(var subject in Model)
+    {
+        <div class="admin__panel__btn__box">
+            <a href="@Url.Action("Subject", "Teacher", new {teacherId = @ViewBag.teacherId, subjectId = subject.SubjectID})"
+               class="admin__panel__btn__text">@subject.SubjectName</a>
+        </div>
+    }
+</div>

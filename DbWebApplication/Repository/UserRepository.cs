@@ -26,6 +26,7 @@ public class UserRepository(AppDbContext context) : IUserRepository
                 .SetProperty(p => p.Password, userModel.Password)
                 .SetProperty(p => p.Email, userModel.Email)
                 .SetProperty(p => p.PhoneNumber, userModel.PhoneNumber)
+                .SetProperty(p => p.StudentId, userModel.StudentId)
                 .SetProperty(p => p.Role, userModel.Role)
                 .SetProperty(p => p.QrCodeToken, userModel.QrCodeToken)
                 .SetProperty(p => p.TokenDateExpired, userModel.TokenDateExpired)
@@ -53,6 +54,9 @@ public class UserRepository(AppDbContext context) : IUserRepository
     public async Task<List<AppUserModel>> GetUsers()
     {
         var users = await context.AppUsers
+            .Include(s => s.Student)
+            .ThenInclude(sp => sp.Specialty)
+            .ThenInclude(f => f.Faculty)
             .AsNoTracking()
             .ToListAsync();
 
@@ -63,6 +67,8 @@ public class UserRepository(AppDbContext context) : IUserRepository
     {
         return await context.AppUsers
             .Include(u => u.Student)
+            .ThenInclude(sp => sp.Specialty)
+            .ThenInclude(f => f.Faculty)
             .FirstOrDefaultAsync(u => u.Id == id);
     }
 
@@ -82,5 +88,24 @@ public class UserRepository(AppDbContext context) : IUserRepository
             .FirstOrDefaultAsync(u => u.StudentId == id);
         
         return user; 
+    }
+    
+    public async Task AddQrTokenToStudentAsync(AppUserModel user)
+    {
+        Guid token = System.Guid.NewGuid();
+
+        user.QrCodeToken = token;
+        DateTime now = DateTime.Now;
+        DateTime time = now.AddDays(7);
+        user.TokenDateExpired = time;
+        context.AppUsers.Update(user);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<AppUserModel> GetStudentByQrToken(string token)
+    {
+        Guid studentToken = Guid.Parse(token);
+        return await context.AppUsers.FirstOrDefaultAsync(s =>
+            s.QrCodeToken == studentToken && s.TokenDateExpired >= DateTime.Now);
     }
 }

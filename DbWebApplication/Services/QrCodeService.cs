@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
+using DbWebApplication.Interfaces.IServices;
 using ZXing;
 using ZXing.Common;
 using ZXing.QrCode;
@@ -7,7 +8,7 @@ using ZXing.Windows.Compatibility;
 
 namespace DbWebApplication.Services
 {
-    public class QrCodeService
+    public class QrCodeService : IQrCodeService
     {
         public async Task<string> ReadQRCode(byte[] byteArray)
         {

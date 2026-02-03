@@ -1,0 +1,172 @@
+﻿@model DbWebApplication.ViewModels.VidomistTypeViewModel
+
+
+<h1 class="title__universyty">
+    МІЖНАРОДНИЙ ЕКОНОМІКО- ГУМАНІТАРНИЙ УНІВЕРСИТЕТ ІМЕНІ АКАДЕМІКА
+    СТЕПАНА ДЕМ'ЯНЧУКА
+</h1>
+<div class="universyty__inner__top">
+    <p class="universyty__inner__top__text">
+        Факультет <u>@Model.Faculty.Name</u>
+    </p>
+    <u class="universyty__inner__top__text"> Група @Model.Specialty.Name</u>
+</div>
+<div class="universyty__inner__top">
+    <p class="universyty__inner__top__text">
+        Спеціальність <u>014 Середня освіта (інформатика)</u>
+    </p>
+    <u class="universyty__inner__top__text text--left"> Курс || </u>
+</div>
+<h3 class="year__study">2024-2025 навчальний рік</h3>
+<h3 class="year__subtitle">Відомість обліку успішності № ____</h3>
+<p class="year__subtitle__date">
+    <span class="year__subtitle__date__part__1">"12"</span>
+    <span class="year__subtitle__date__part__2">листопада</span>
+    2026 року
+</p>
+<p class="subject__name__work__book">
+    @Model.Subject.SubjectName
+</p>
+<p class="subject__name__work__book__small__text">
+    (назва навчальної дисципліни)
+</p>
+<p class="subject__name__work__book__small__text__semester">
+    за
+    <span
+        class="subject__name__work__book__small__text__semester__number"
+    >@Model.Session.SemesterNumber</span
+    >
+    семестр
+</p>
+<p class="test__ctx">
+    форма семестрового контролю
+    <span class="name__test">@Model.Subject.Type</span> загальна кількість годин
+    <span class="hour__test">@Model.Subject.Hours</span>
+</p>
+<div class="info__teacher">
+    <span class="teacher__role">Викладач</span>
+    <span class="teacher__name">доц. @Model.Teacher.LastName @Model.Teacher.FirstName[0].
+        @Model.Teacher.FatherName[0]. </span>
+</div>
+<p class="teacher__desc">
+    (вчене,звання пріхвіще та ініціали викладача, якій виставляє
+    підсумкову оцінку)
+</p>
+
+<div class="table__score">
+    <table>
+        <tr>
+            <th>№ з/п</th>
+            <th>Прізвище та ініціали студента</th>
+            <th>Оцінка</th>
+            <th>Бал за національною шкалою</th>
+            <th>ECTS</th>
+            <th>ПІБ викладача</th>
+        </tr>
+        <form method="post" asp-action="Vidomist">
+            <input type="hidden" name="SessionId" value="@Model.Subject.SessionId" />
+            <input type="hidden" name="SessionSubjectId" value="@Model.Subject.Id" />
+            @for (int i = 0; i < @Model.Students.Count; i++)
+            {
+                <tr>
+                    <td>@(i + 1).</td>
+                    <td>@Model.Students[i].LastName @Model.Students[i].FirstName</td>
+                    <td>
+                        <input type="hidden" name="StudentGrades[@i].StudentId" value="@Model.Students[i].Id" />
+                        <input type="text"
+                               name="StudentGrades[@i].Grade"
+                               class="table-input"
+                               value="@Model.Students[i].Grade"
+                               @(Model.Students[i].Grade.HasValue ? "disabled" : "") />
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+            <button type="submit" class="my_button">Зберегти</button>
+        </form>
+    </table>
+</div>
+<div class="table__score__bottom__inner">
+    <p class="table__score__bottom__text">
+        Декан факультету кібернетики
+    </p>
+    <p class="table__score__bottom__text__signature">
+        ______________________
+    </p>
+    <p class="table__score__bottom__text__teacher__name">
+        Людмила Соловей
+    </p>
+</div>
+<h3 class="table__score__title">
+    Підсумки складання екзамену (заліку)
+</h3>
+
+<div class="table__score">
+    <table>
+        <tr>
+            <th rowspan="2">ВСЬОГО ОЦІНОК</th>
+            <th rowspan="2">СУМА БАЛІВ</th>
+            <th rowspan="2">ОЦІНКА ECTS</th>
+            <th colspan="2">ОЦІНКА ЗА НАЦІОНАЛЬНОЮ ШКАЛОЮ</th>
+        </tr>
+        <tr>
+            <th>екзамен</th>
+            <th>залік</th>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td>90-100</td>
+            <td>A</td>
+            <td>відмінно</td>
+            <td rowspan="3">зараховано</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>82-89</td>
+            <td>B</td>
+            <td rowspan="2">добре</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>74-81</td>
+            <td>C</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>64-73</td>
+            <td>D</td>
+            <td rowspan="2">задовільно</td>
+            <td rowspan="2">зараховано</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>60-63</td>
+            <td>E</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>35-59</td>
+            <td>FX</td>
+            <td rowspan="2">незадовільно</td>
+            <td rowspan="2">не зараховано</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>1-34</td>
+            <td>F</td>
+        </tr>
+    </table>
+</div>
+<div class="table__score__bottom__inner">
+    <p class="table__score__bottom__text">Eкзаментор (викладач)</p>
+    <p class="table__score__bottom__text__signature">
+        ______________________
+    </p>
+    <p class="table__score__bottom__text__teacher__name">
+        @Model.Teacher.FirstName @Model.Teacher.LastName 
+    </p>
+</div>
+      

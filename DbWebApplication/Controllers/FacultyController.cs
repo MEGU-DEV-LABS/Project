@@ -1,4 +1,6 @@
-﻿using DbWebApplication.Services;
+﻿using DbWebApplication.Interfaces.IServices;
+using DbWebApplication.Models;
+using DbWebApplication.Services;
 using DbWebApplication.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,8 +8,8 @@ namespace DbWebApplication.Controllers;
 
 [Route("faculty")]
 public class FacultyController(
-    FacultyService facultyService,
-    UserService userService
+    IFacultyService facultyService,
+    IUserService userService
     ): Controller
 {
     private int GetUserId()
@@ -21,27 +23,74 @@ public class FacultyController(
     }
     
     [HttpGet("faculties")]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> AllFaculties()
     {
-        var userId = GetUserId();
-        
-        var user = await userService.GetUser(userId);
         var faculties = await facultyService.GetAllFaculties();
-
-        var model = new Faculty_Index_ViewModel
-        {
-            User = user,
-            Faculties = faculties
-        };
         
-        return View(model);
+        return View(faculties);
     }
 
     [HttpGet("showFaculty/{id}")]
     public async Task<IActionResult> ShowFaculty(int id)
     {
-        var faculty = facultyService.GetFacultyById(id);
+        var faculty = await facultyService.GetFacultyById(id);
         
         return View(faculty);
+    }
+    
+    [HttpGet("create")]
+    public async Task<IActionResult> CreateFaculty()
+    {
+        return View();
+    }
+    
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateFaculty(FacultyModel model)
+    {
+       
+        await facultyService.CreateFaculty(model);
+        
+        return RedirectToAction("AllFaculties");
+    }
+    
+    [HttpGet("edit/{id}")]
+    public async Task<IActionResult> EditFaculty(int id)
+    {
+        var faculty = await facultyService.GetFacultyById(id);
+        
+        if (faculty == null)
+        {
+            return NotFound();
+        }
+        
+        return View(faculty);
+    }
+    
+    [HttpPost("edit/{id}")]
+    public async Task<IActionResult> EditFaculty(FacultyModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+        
+        await facultyService.UpdateFaculty(model);
+        
+        return RedirectToAction("AllFaculties");
+    }
+    
+    [HttpPost("delete/{id}")]
+    public async Task<IActionResult> DeleteFaculty(int id)
+    {
+        try
+        {
+            await facultyService.DeleteFaculty(id);
+        }
+        catch (NullReferenceException)
+        {
+            return NotFound();
+        }
+        
+        return RedirectToAction("AllFaculties");
     }
 }

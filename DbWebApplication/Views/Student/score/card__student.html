@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Залікова книжка</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 1.25rem;
+      }
+      .container {
+        max-width: 700px;
+        border: 2px solid black;
+        padding: 20px;
+        margin: 0 auto;
+      }
+      .header {
+        text-align: center;
+        font-size: 1.125rem;
+        font-weight: bold;
+        margin-bottom: 1.25rem;
+      }
+      .subheader {
+        text-align: center;
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 1.25rem;
+      }
+      .content {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 3px;
+
+        font-size: 0.875rem;
+        line-height: 1.6;
+      }
+      .photo img {
+        aspect-ratio: 3 / 4; /* Пропорції 3:4 */
+        margin-right: 1.25rem;
+        border: 1px solid black;
+        background: #f2f2f2;
+        width: 100%; /* Ширина 100% у межах батьківського контейнера */
+        max-width: 6.25rem; /* Максимальна ширина */
+        min-height: 8.3125rem; /* Це обмеження ширини */
+      }
+      .info {
+        overflow: hidden;
+      }
+      .stamp {
+        margin-top: 20px;
+        width: 200px;
+        height: 100px;
+        border: 1px solid black;
+        text-align: center;
+        background: #f2f2f2;
+      }
+      .signatures {
+        margin-top: 20px;
+        text-align: right;
+      }
+      .signatures div {
+        margin-bottom: 10px;
+      }
+
+      .date {
+        margin-top: 20px;
+        text-align: right;
+      }
+
+      @media (max-width: 510px) {
+        .sub__info {
+          display: flex;
+          flex-wrap: wrap;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .date {
+          text-align: center;
+        }
+
+        .signatures {
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        Міністерство освіти і науки України<br />
+        Приватний вищий навчальний заклад<br />
+        «Міжнародний економіко-гуманітарний університет<br />
+        імені академіка Степана Дем’янчука»
+      </div>
+
+      <div class="subheader">
+        ЗАЛІКОВА КНИЖКА №КИ2320020<br />
+        СТУДЕНТА СТУПЕНЯ ВИЩОЇ ОСВІТИ «БАКАЛАВР»
+      </div>
+
+      <div class="content">
+        <div class="photo">
+          <img src="images/photo_2024-12-09_16-08-37.jpg" alt="" />
+        </div>
+        <div class="info">
+          <strong>Прізвище, ім’я, по батькові:</strong> Жук Дмитро Васильович<br />
+          <strong>Інститут, факультет, відділення:</strong> кібернетики<br />
+          <strong>Галузь знань:</strong> 01 Освіта<br />
+          <strong>Спеціальність:</strong> 014 Середня освіта (інформатика)<br />
+          <strong>Ступінь вищої освіти:</strong> бакалавр<br />
+          <strong>Форма навчання:</strong> денна<br />
+          <strong>Курс:</strong> 1<br />
+          <strong>З:</strong> 01.09.2023
+        </div>
+      </div>
+
+      <div class="sub__info">
+        <div class="signatures">
+          <div class="boss1">
+            <p>Проректор навчальної роботи:</p>
+            Яницька О.Ю.
+          </div>
+          <div class="boss2">
+            <p>Декан факультету:</p>
+            Жуковська В.І.
+          </div>
+        </div>
+
+        <div class="date">
+          <strong>Дата видачі залікової книжки:</strong> 01.09.2023
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

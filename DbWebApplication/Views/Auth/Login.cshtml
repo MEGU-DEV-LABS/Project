@@ -1,0 +1,28 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DbWebApplication.ViewModels.Requests.LoginRequests
+
+<form class="form__login" asp-action="Login" asp-controller="Auth" method="post">
+
+    <div class="input-control">
+        <label asp-for="Email"></label>
+        <input id="email__login" asp-for="Email" class="form-control" placeholder="example@gmail.com" />
+        <span asp-validation-for="Email" class="text-danger error"></span>
+    </div>
+
+    <div class="input-control">
+        <label asp-for="Password"></label>
+        <input id="password__login" asp-for="Password" class="form-control" type="password" placeholder="Пароль" />
+        <span asp-validation-for="Password" class="text-danger error"></span>
+    </div>
+
+    <div class="btn__con">
+        <button class="login" type="submit">Увійти</button>
+    </div>
+
+    <div class="btn__con"> 
+        <a class="qr__code__btn" href="@Url.Action("LoginWithQrCode", "Auth")"> Увійти з QR-кодом </a>
+        </div>
+</form>
+
+
+

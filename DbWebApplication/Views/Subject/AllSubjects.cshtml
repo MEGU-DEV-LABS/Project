@@ -1,0 +1,23 @@
+﻿@model List<DbWebApplication.Models.SubjectModel>
+
+<h3 class="marks__title">
+    Список предметів
+</h3>
+
+<div class="marks__inner">
+    @foreach (var subject in Model)
+    {
+        <div class="marks__inner__ctx">
+            @if (!string.IsNullOrEmpty(subject.ImageBase64))
+            {
+                <img class="marks__img" src="data:image/png;base64,@subject.ImageBase64" alt="@subject.SubjectName" />
+            }
+            else
+            {
+                <img class="marks__img" src="" alt="no image" />
+            }
+
+            <p class="mark__name">@subject.SubjectName</p>
+        </div>
+    }
+</div>    

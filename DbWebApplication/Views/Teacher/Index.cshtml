@@ -1,0 +1,12 @@
+﻿<h3 class="role">@ViewBag.SubjectName</h3>
+
+<div class="admin__panel__inner">
+    <div class="admin__panel__btn__box">
+        <a href="@Url.Action("Subjects", "Teacher", new {teacherId = @ViewBag.teacherId})"
+           class="admin__panel__btn__text">Предмети</a>
+    </div>
+    <div class="admin__panel__btn__box">
+        <a href="@Url.Action("Vidomists", "Teacher", new {teacherId = @ViewBag.teacherId})"
+           class="admin__panel__btn__text">Відомість</a>
+    </div>
+</div>

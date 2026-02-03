@@ -11,7 +11,7 @@ public class LabWorkGradeModel
 
     public int LabWorkID { get; set; }
     
-    public int GradeValue { get; set; }
+    public int? GradeValue { get; set; }
 
     public StudentModel Student { get; set; }
     

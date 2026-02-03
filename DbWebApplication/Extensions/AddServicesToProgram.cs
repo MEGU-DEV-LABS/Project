@@ -1,5 +1,8 @@
 ﻿using DbWebApplication.Data;
 using DbWebApplication.Interfaces;
+using DbWebApplication.Interfaces.IRepositories;
+using DbWebApplication.Interfaces.IServices;
+using DbWebApplication.Models;
 using DbWebApplication.Providers;
 using DbWebApplication.Repository;
 using DbWebApplication.Services;
@@ -12,11 +15,16 @@ public static class AddServicesToProgram
 {
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
-        services.AddScoped<FacultyService>();
-        services.AddScoped<SpecialtyService>();
-        services.AddScoped<StudentService>();
-        services.AddScoped<UserService>();
-        services.AddScoped<QrCodeService>();
+        services.AddScoped<IFacultyService, FacultyService>();
+        services.AddScoped<ISpecialtyService, SpecialtyService>();
+        services.AddScoped<IStudentService, StudentService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IQrCodeService, QrCodeService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ILabService, LabService>();
+        services.AddScoped<ISubjectService, SubjectService>();
+        services.AddScoped<ISessionService, SessionService>();
+        services.AddScoped<IStudyPlanService, StudyPlanService>();
         return services;
     }
     
@@ -25,6 +33,8 @@ public static class AddServicesToProgram
         services.AddMemoryCache();
         services.AddSession();
         services.AddControllersWithViews();
+        services.AddHttpContextAccessor();
+        
         return services;
     }
     
@@ -54,6 +64,11 @@ public static class AddServicesToProgram
         services.AddScoped<IFacultyRepository, FacultyRepository>();
         services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
         services.AddScoped<ISubjectRepository, SubjectRepository>();
+        services.AddScoped<ISessionRepository, SessionRepository>();
+        services.AddScoped<ILabRepository, LabRepository>();
+        services.AddScoped<IStudyPlanRepository, StudyPlanRepository>();
+        services.AddScoped<ITeacherRepository, TeacherRepository>();
+        services.AddScoped<ISessionSubjectRepository, SessionSubjectRepository>();
         return services;
     }
     

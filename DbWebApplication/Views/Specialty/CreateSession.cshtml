@@ -1,0 +1,591 @@
+﻿@model List<SubjectModel>
+
+<style>
+    h1 {
+        font-size: 2.25rem;
+        font-weight: 800;
+        color: #3730a3;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .columns-wrapper {
+        display: flex;
+        flex-direction: row;
+        gap: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    .column {
+        flex: 1;
+        background: white;
+        padding: 1.25rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+    }
+
+    .column h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .column h2.available {
+        color: #4338ca;
+        border-bottom: 2px solid #c7d2fe;
+    }
+
+    .column h2.picked {
+        color: #15803d;
+        border-bottom: 2px solid #bbf7d0;
+    }
+
+    .subjects-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        max-height: 24rem;
+        overflow-y: auto;
+        padding-right: 0.5rem;
+    }
+
+    .subjects-list::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .subjects-list::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 4px;
+    }
+
+    .subjects-list::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+
+    .subject-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        font-size: 1.125rem;
+        transition: all 0.2s ease-in-out;
+        border: 1px solid;
+        cursor: pointer;
+    }
+
+    .subject-item.available {
+        background-color: #f9fafb;
+        color: #374151;
+        border-color: #e5e7eb;
+    }
+
+    .subject-item.available:hover {
+        background-color: #f3f4f6;
+        color: #1f2937;
+    }
+
+    .subject-item.selected {
+        background-color: #e0e7ff;
+        color: #3730a3;
+        border-color: #a5b4fc;
+        font-weight: 500;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .subject-item.picked {
+        background-color: #f0fdf4;
+        color: #15803d;
+        border-color: #bbf7d0;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        cursor: default;
+    }
+
+    .subject-content {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex: 1;
+    }
+
+    .subject-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .checkmark {
+        width: 1.25rem;
+        height: 1.25rem;
+        color: #4f46e5;
+    }
+
+    /* Стилі для radio buttons */
+    .exam-type-selector {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .radio-option:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .radio-option input[type="radio"] {
+        width: 1rem;
+        height: 1rem;
+        cursor: pointer;
+        accent-color: #16a34a;
+    }
+
+    .radio-option label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .exam-badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.375rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+    }
+
+    .exam-badge.zalik {
+        background-color: #dbeafe;
+        color: #1e40af;
+    }
+
+    .exam-badge.ispyt {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+
+    .remove-btn {
+        padding: 0.25rem;
+        color: #16a34a;
+        background: none;
+        border: none;
+        cursor: pointer;
+        border-radius: 9999px;
+        transition: all 0.2s;
+    }
+
+    .remove-btn:hover {
+        color: #b91c1c;
+    }
+
+    .remove-btn:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px #fca5a5;
+    }
+
+    .remove-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    .middle-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem 0;
+    }
+
+    .move-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 9999px;
+        color: white;
+        font-weight: bold;
+        font-size: 1.125rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .move-btn:enabled {
+        background-color: #4f46e5;
+    }
+
+    .move-btn:enabled:hover {
+        background-color: #4338ca;
+    }
+
+    .move-btn:enabled:focus {
+        outline: none;
+        box-shadow: 0 0 0 4px #c7d2fe;
+    }
+
+    .move-btn:disabled {
+        background-color: #9ca3af;
+        cursor: not-allowed;
+    }
+
+    .submit-btn {
+        padding: 0.75rem 2rem;
+        border-radius: 9999px;
+        color: white;
+        font-weight: bold;
+        font-size: 1.125rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .submit-btn:enabled {
+        background-color: #16a34a;
+    }
+
+    .submit-btn:enabled:hover {
+        background-color: #15803d;
+    }
+
+    .submit-btn:enabled:focus {
+        outline: none;
+        box-shadow: 0 0 0 4px #bbf7d0;
+    }
+
+    .submit-btn:disabled {
+        background-color: #9ca3af;
+        cursor: not-allowed;
+    }
+
+    .empty-message {
+        color: #6b7280;
+        text-align: center;
+        padding: 1rem 0;
+    }
+
+    .form-footer {
+        display: flex;
+        justify-content: flex-end;
+        padding-top: 1rem;
+        border-top: 1px solid #e5e7eb;
+        margin-top: 1.5rem;
+    }
+
+    .exam-type-info {
+        background-color: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+        color: #1e40af;
+    }
+</style>
+
+<h1>Subject Picker for Enrollment</h1>
+
+<div class="columns-wrapper">
+    <!-- Left Column: Available Subjects -->
+    <div class="column">
+        <h2 class="available">Available Subjects</h2>
+        <div class="subjects-list" id="availableSubjects"></div>
+    </div>
+
+    <!-- Middle Section: Action Button -->
+    <div class="middle-section">
+        <button class="move-btn" id="moveBtn" disabled>Move Selected &gt;&gt;</button>
+    </div>
+
+    <!-- Right Column: Form with Picked Subjects -->
+    <div class="column">
+        <h2 class="picked">Subjects for Form</h2>
+        <div class="exam-type-info">
+            💡 Виберіть тип контролю для кожного предмету: Залік (1) або Іспит (2)
+        </div>
+        <form id="subjectForm" method="post" asp-action="CreateSession" asp-controller="Specialty">
+            <input type="hidden" name="specialtyId" value="@ViewBag.SpecialtyId" />
+            <div class="subjects-list" id="pickedSubjects"></div>
+            <div class="form-footer">
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>Submit Subjects</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const initialAllSubjects = [
+        @foreach (var subject in Model)
+        {
+            @:{ id: @subject.SubjectID, name: '@Html.Raw(subject.SubjectName)' },
+        }
+    ];
+
+    const specialtyId = @ViewBag.SpecialtyId;
+
+    let availableSubjects = [...initialAllSubjects].sort((a, b) => a.name.localeCompare(b.name));
+    let selectedSubjects = [];
+    let pickedSubjectsForForm = []; // { id, name, examType: 1 or 2 }
+
+    const availableSubjectsContainer = document.getElementById('availableSubjects');
+    const pickedSubjectsContainer = document.getElementById('pickedSubjects');
+    const moveBtn = document.getElementById('moveBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const subjectForm = document.getElementById('subjectForm');
+
+    function renderAvailableSubjects() {
+        availableSubjectsContainer.innerHTML = '';
+        
+        if (availableSubjects.length === 0) {
+            availableSubjectsContainer.innerHTML = '<p class="empty-message">All subjects have been moved.</p>';
+            return;
+        }
+
+        availableSubjects.forEach(subject => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = `subject-item ${selectedSubjects.some(s => s.id === subject.id) ? 'selected' : 'available'}`;
+            button.onclick = () => toggleSelectSubject(subject);
+            
+            const span = document.createElement('span');
+            span.textContent = subject.name;
+            button.appendChild(span);
+
+            if (selectedSubjects.some(s => s.id === subject.id)) {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('class', 'checkmark');
+                svg.setAttribute('viewBox', '0 0 20 20');
+                svg.setAttribute('fill', 'currentColor');
+                
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('fill-rule', 'evenodd');
+                path.setAttribute('d', 'M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z');
+                path.setAttribute('clip-rule', 'evenodd');
+                
+                svg.appendChild(path);
+                button.appendChild(svg);
+            }
+
+            availableSubjectsContainer.appendChild(button);
+        });
+    }
+
+    function renderPickedSubjects() {
+        pickedSubjectsContainer.innerHTML = '';
+        
+        if (pickedSubjectsForForm.length === 0) {
+            pickedSubjectsContainer.innerHTML = '<p class="empty-message">No subjects picked yet. Select from the left.</p>';
+            submitBtn.disabled = true;
+            return;
+        }
+
+        pickedSubjectsForForm.forEach(subject => {
+            const div = document.createElement('div');
+            div.className = 'subject-item picked';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'subject-content';
+            
+            // Назва предмету
+            const span = document.createElement('span');
+            span.textContent = subject.name;
+            contentDiv.appendChild(span);
+
+            // Badge з типом контролю
+            const badge = document.createElement('span');
+            badge.className = `exam-badge ${subject.examType === 1 ? 'zalik' : 'ispyt'}`;
+            badge.textContent = subject.examType === 1 ? 'Залік' : 'Іспит';
+            contentDiv.appendChild(badge);
+            
+            div.appendChild(contentDiv);
+
+            // Контейнер для контролів
+            const controlsDiv = document.createElement('div');
+            controlsDiv.className = 'subject-controls';
+
+            // Radio buttons для вибору типу контролю
+            const examTypeSelector = document.createElement('div');
+            examTypeSelector.className = 'exam-type-selector';
+
+            // Залік (1)
+            const zalikOption = document.createElement('div');
+            zalikOption.className = 'radio-option';
+            
+            const zalikRadio = document.createElement('input');
+            zalikRadio.type = 'radio';
+            zalikRadio.name = `examType_${subject.id}`;
+            zalikRadio.id = `zalik_${subject.id}`;
+            zalikRadio.value = '1';
+            zalikRadio.checked = subject.examType === 1;
+            zalikRadio.onchange = () => handleExamTypeChange(subject.id, 1);
+            
+            const zalikLabel = document.createElement('label');
+            zalikLabel.htmlFor = `zalik_${subject.id}`;
+            zalikLabel.textContent = 'Залік';
+            
+            zalikOption.appendChild(zalikRadio);
+            zalikOption.appendChild(zalikLabel);
+
+            // Іспит (2)
+            const ispytOption = document.createElement('div');
+            ispytOption.className = 'radio-option';
+            
+            const ispytRadio = document.createElement('input');
+            ispytRadio.type = 'radio';
+            ispytRadio.name = `examType_${subject.id}`;
+            ispytRadio.id = `ispyt_${subject.id}`;
+            ispytRadio.value = '2';
+            ispytRadio.checked = subject.examType === 2;
+            ispytRadio.onchange = () => handleExamTypeChange(subject.id, 2);
+            
+            const ispytLabel = document.createElement('label');
+            ispytLabel.htmlFor = `ispyt_${subject.id}`;
+            ispytLabel.textContent = 'Іспит';
+            
+            ispytOption.appendChild(ispytRadio);
+            ispytOption.appendChild(ispytLabel);
+
+            examTypeSelector.appendChild(zalikOption);
+            examTypeSelector.appendChild(ispytOption);
+            controlsDiv.appendChild(examTypeSelector);
+
+            // Приховані поля для відправки на сервер
+            const hiddenSubjectId = document.createElement('input');
+            hiddenSubjectId.type = 'hidden';
+            hiddenSubjectId.name = 'subjectIds';
+            hiddenSubjectId.value = subject.id;
+            div.appendChild(hiddenSubjectId);
+
+            const hiddenExamType = document.createElement('input');
+            hiddenExamType.type = 'hidden';
+            hiddenExamType.name = 'examTypes';
+            hiddenExamType.value = subject.examType;
+            hiddenExamType.id = `hiddenExamType_${subject.id}`;
+            div.appendChild(hiddenExamType);
+
+            // Кнопка видалення
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'remove-btn';
+            removeBtn.setAttribute('aria-label', `Remove ${subject.name}`);
+            removeBtn.onclick = () => handleRemoveFromForm(subject);
+
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('class', 'remove-icon');
+            svg.setAttribute('viewBox', '0 0 20 20');
+            svg.setAttribute('fill', 'currentColor');
+            
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('fill-rule', 'evenodd');
+            path.setAttribute('d', 'M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z');
+            path.setAttribute('clip-rule', 'evenodd');
+            
+            svg.appendChild(path);
+            removeBtn.appendChild(svg);
+            controlsDiv.appendChild(removeBtn);
+
+            div.appendChild(controlsDiv);
+            pickedSubjectsContainer.appendChild(div);
+        });
+
+        submitBtn.disabled = false;
+    }
+
+    function toggleSelectSubject(subject) {
+        const index = selectedSubjects.findIndex(s => s.id === subject.id);
+        if (index !== -1) {
+            selectedSubjects.splice(index, 1);
+        } else {
+            selectedSubjects.push(subject);
+        }
+        
+        moveBtn.disabled = selectedSubjects.length === 0;
+        renderAvailableSubjects();
+    }
+
+    function handleMoveToForm() {
+        if (selectedSubjects.length === 0) return;
+
+        // Додаємо вибрані предмети з типом контролю за замовчуванням (1 - Залік)
+        const newSubjects = selectedSubjects.map(s => ({
+            ...s,
+            examType: 1 // За замовчуванням залік
+        }));
+
+        pickedSubjectsForForm = [...pickedSubjectsForForm, ...newSubjects]
+            .sort((a, b) => a.name.localeCompare(b.name));
+        
+        availableSubjects = availableSubjects
+            .filter(s => !selectedSubjects.some(sel => sel.id === s.id))
+            .sort((a, b) => a.name.localeCompare(b.name));
+        
+        selectedSubjects = [];
+
+        moveBtn.disabled = true;
+        renderAvailableSubjects();
+        renderPickedSubjects();
+    }
+
+    function handleExamTypeChange(subjectId, examType) {
+        const subject = pickedSubjectsForForm.find(s => s.id === subjectId);
+        if (subject) {
+            subject.examType = examType;
+            
+            // Оновлюємо приховане поле
+            const hiddenField = document.getElementById(`hiddenExamType_${subjectId}`);
+            if (hiddenField) {
+                hiddenField.value = examType;
+            }
+            
+            // Перемальовуємо для оновлення badge
+            renderPickedSubjects();
+        }
+    }
+
+    function handleRemoveFromForm(subjectToRemove) {
+        pickedSubjectsForForm = pickedSubjectsForForm.filter(s => s.id !== subjectToRemove.id);
+        availableSubjects = [...availableSubjects, { id: subjectToRemove.id, name: subjectToRemove.name }]
+            .sort((a, b) => a.name.localeCompare(b.name));
+
+        renderAvailableSubjects();
+        renderPickedSubjects();
+    }
+
+    function handleSubmitForm(event) {
+        event.preventDefault();
+        
+        if (pickedSubjectsForForm.length === 0) {
+            alert('Please select at least one subject');
+            return;
+        }
+
+        console.log('Submitting:', {
+            specialtyId: specialtyId,
+            subjects: pickedSubjectsForForm.map(s => ({
+                id: s.id,
+                examType: s.examType
+            }))
+        });
+        
+        subjectForm.submit();
+    }
+
+    // Event listeners
+    moveBtn.addEventListener('click', handleMoveToForm);
+    subjectForm.addEventListener('submit', handleSubmitForm);
+
+    // Initial render
+    renderAvailableSubjects();
+    renderPickedSubjects();
+</script>

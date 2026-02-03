@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DbWebApplication.ViewModels.SubjectLabsViewModel
+
+<style>
+    .my_button {
+        margin: 25px;
+        text-align: center;
+        font-weight: 500;
+        line-height: 1.5;
+        border: 1px solid #000;
+        background-color: #5e87c2;
+        padding: 5px;
+        border-radius: 10px;
+    }
+</style>
+
+
+<p class="subject__name__work__book">
+    @Model.Subject.SubjectName
+</p>
+<p class="subject__name__work__book__small__text">
+    (назва навчальної дисципліни)
+</p>
+<p class="test__ctx"> загальна кількість годин
+    <span class="hour__test">@Model.Subject.Hours</span>
+</p>
+<div class="info__teacher">
+    <span class="teacher__role">Викладач</span>
+    <span class="teacher__name">доц. @Model.Subject.Teacher.LastName @Model.Subject.Teacher.FirstName[0].
+        @Model.Subject.Teacher.FatherName[0]..</span>
+</div>
+<p class="teacher__desc">
+    (вчене,звання пріхвіще та ініціали викладача, якій виставляє
+    підсумкову оцінку)
+</p>
+
+<form method="post" asp-action="Subject">
+    @for (int l = 0; l < Model.Labs.Count; l++)
+    {
+        <p class="form__title">@Model.Labs[l].Lab.LabWorkName</p>
+
+        <input type="hidden"
+               name="Labs[@l].Lab.LabWorkID"
+               value="@Model.Labs[l].Lab.LabWorkID" />
+
+        <table>
+            <tr>
+                <th>№</th>
+                <th>Студент</th>
+                <th>Оцінка</th>
+            </tr>
+
+            @for (int i = 0; i < Model.Labs[l].Students.Count; i++)
+            {
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td>
+                        @Model.Labs[l].Students[i].LastName
+                        @Model.Labs[l].Students[i].FirstName
+                    </td>
+                    <td>
+                        <input type="hidden"
+                               name="Labs[@l].Students[@i].StudentId"
+                               value="@Model.Labs[l].Students[i].StudentId" />
+
+                        <input type="number"
+                               name="Labs[@l].Students[@i].GradeValue"
+                               value="@Model.Labs[l].Students[i].GradeValue"
+                               class="table-input" />
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    <button type="submit" class="my_button">Зберегти</button>
+</form>
+

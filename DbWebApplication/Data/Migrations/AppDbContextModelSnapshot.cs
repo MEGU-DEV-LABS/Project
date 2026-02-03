@@ -17,7 +17,7 @@ namespace DbWebApplication.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0-rc.1.24451.1")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -53,11 +53,20 @@ namespace DbWebApplication.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("QrCodeToken")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
                     b.Property<int?>("StudentId")
                         .HasColumnType("int");
+
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("TokenDateExpired")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -71,7 +80,7 @@ namespace DbWebApplication.Migrations
                             FatherName = "Admin",
                             FirstName = "Admin",
                             LastName = "Admin",
-                            Password = "$2a$11$FUFiZlbGihZVrEt1Xt/g5uzA9iyWoxY/YokpNNniD4zdaFBlMBlOe",
+                            Password = "$2a$11$mMbMzhfgYF.RbVqnlGwgRuvJZCEvqYTxjfyra6NGmEXeT6wJe9h2G",
                             Role = 2
                         });
                 });
@@ -123,7 +132,7 @@ namespace DbWebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LabWorkGradeID"));
 
-                    b.Property<int>("GradeValue")
+                    b.Property<int?>("GradeValue")
                         .HasColumnType("int");
 
                     b.Property<int>("LabWorkID")
@@ -191,6 +200,27 @@ namespace DbWebApplication.Migrations
                     b.ToTable("ScheduleDay");
                 });
 
+            modelBuilder.Entity("DbWebApplication.Models.Session", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("SemesterNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SpecialtyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SpecialtyId");
+
+                    b.ToTable("Sessions");
+                });
+
             modelBuilder.Entity("DbWebApplication.Models.SessionGrades", b =>
                 {
                     b.Property<int>("Id")
@@ -199,7 +229,7 @@ namespace DbWebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Grade")
+                    b.Property<int?>("Grade")
                         .HasColumnType("int");
 
                     b.Property<int>("SessionId")
@@ -228,15 +258,35 @@ namespace DbWebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<byte[]>("ImageData")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                    b.Property<int>("Credits")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Hours")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SessionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
 
                     b.Property<string>("SubjectName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SessionId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("SessionSubjects");
                 });
@@ -307,14 +357,8 @@ namespace DbWebApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("QrCodeToken")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("SpecialtyId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("TokenDateExpired")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -326,6 +370,58 @@ namespace DbWebApplication.Migrations
                     b.ToTable("Students");
                 });
 
+            modelBuilder.Entity("DbWebApplication.Models.StudyPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("SemesterNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SpecialtyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SpecialtyId");
+
+                    b.ToTable("StudyPlans");
+                });
+
+            modelBuilder.Entity("DbWebApplication.Models.SubjectGrade", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SubjectModelSubjectID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("SubjectModelSubjectID");
+
+                    b.ToTable("SubjectsGrades");
+                });
+
             modelBuilder.Entity("DbWebApplication.Models.SubjectModel", b =>
                 {
                     b.Property<int>("SubjectID")
@@ -334,52 +430,79 @@ namespace DbWebApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubjectID"));
 
+                    b.Property<int>("Credits")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Hours")
+                        .HasColumnType("int");
+
                     b.Property<byte[]>("ImageData")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
-
-                    b.Property<int?>("StudentModelId")
-                        .HasColumnType("int");
 
                     b.Property<string>("SubjectName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("int");
+
                     b.HasKey("SubjectID");
 
-                    b.HasIndex("StudentModelId");
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Subjects");
                 });
 
-            modelBuilder.Entity("SessionSubjectsSpecialtyModel", b =>
+            modelBuilder.Entity("DbWebApplication.Models.TeacherModel", b =>
                 {
-                    b.Property<int>("SessionSubjectsId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("SpecialtiesId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AppUserId")
                         .HasColumnType("int");
 
-                    b.HasKey("SessionSubjectsId", "SpecialtiesId");
+                    b.Property<int>("FacultyId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("SpecialtiesId");
+                    b.Property<string>("FatherName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("SessionSubjectsSpecialtyModel");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId")
+                        .IsUnique();
+
+                    b.HasIndex("FacultyId");
+
+                    b.ToTable("Teachers");
                 });
 
-            modelBuilder.Entity("SpecialtyModelSubjectModel", b =>
+            modelBuilder.Entity("StudyPlanSubjectModel", b =>
                 {
-                    b.Property<int>("SpecialtiesId")
+                    b.Property<int>("StudyPlansId")
                         .HasColumnType("int");
 
                     b.Property<int>("SubjectsSubjectID")
                         .HasColumnType("int");
 
-                    b.HasKey("SpecialtiesId", "SubjectsSubjectID");
+                    b.HasKey("StudyPlansId", "SubjectsSubjectID");
 
                     b.HasIndex("SubjectsSubjectID");
 
-                    b.ToTable("SpecialtyModelSubjectModel");
+                    b.ToTable("StudyPlanSubjectModel");
                 });
 
             modelBuilder.Entity("DbWebApplication.Models.LabModel", b =>
@@ -402,7 +525,7 @@ namespace DbWebApplication.Migrations
                         .IsRequired();
 
                     b.HasOne("DbWebApplication.Models.StudentModel", "Student")
-                        .WithMany()
+                        .WithMany("LabWorkGrades")
                         .HasForeignKey("StudentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -442,6 +565,17 @@ namespace DbWebApplication.Migrations
                     b.Navigation("SpecialtyScheduleForWeek");
                 });
 
+            modelBuilder.Entity("DbWebApplication.Models.Session", b =>
+                {
+                    b.HasOne("DbWebApplication.Models.SpecialtyModel", "Specialty")
+                        .WithMany("Sessions")
+                        .HasForeignKey("SpecialtyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Specialty");
+                });
+
             modelBuilder.Entity("DbWebApplication.Models.SessionGrades", b =>
                 {
                     b.HasOne("DbWebApplication.Models.SessionSubjects", "SessionSubject")
@@ -459,6 +593,31 @@ namespace DbWebApplication.Migrations
                     b.Navigation("SessionSubject");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("DbWebApplication.Models.SessionSubjects", b =>
+                {
+                    b.HasOne("DbWebApplication.Models.Session", "Session")
+                        .WithMany("SessionSubjects")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DbWebApplication.Models.SubjectModel", "Subject")
+                        .WithMany("SessionSubjects")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DbWebApplication.Models.TeacherModel", "Teacher")
+                        .WithMany("SessionSubjects")
+                        .HasForeignKey("TeacherId");
+
+                    b.Navigation("Session");
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("DbWebApplication.Models.SpecialtyModel", b =>
@@ -502,33 +661,73 @@ namespace DbWebApplication.Migrations
                     b.Navigation("Specialty");
                 });
 
+            modelBuilder.Entity("DbWebApplication.Models.StudyPlan", b =>
+                {
+                    b.HasOne("DbWebApplication.Models.SpecialtyModel", "Specialty")
+                        .WithMany("StudyPlans")
+                        .HasForeignKey("SpecialtyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Specialty");
+                });
+
+            modelBuilder.Entity("DbWebApplication.Models.SubjectGrade", b =>
+                {
+                    b.HasOne("DbWebApplication.Models.StudentModel", "Student")
+                        .WithMany("SubjectGrades")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DbWebApplication.Models.SubjectModel", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DbWebApplication.Models.SubjectModel", null)
+                        .WithMany("SubjectGrades")
+                        .HasForeignKey("SubjectModelSubjectID");
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Subject");
+                });
+
             modelBuilder.Entity("DbWebApplication.Models.SubjectModel", b =>
                 {
-                    b.HasOne("DbWebApplication.Models.StudentModel", null)
+                    b.HasOne("DbWebApplication.Models.TeacherModel", "Teacher")
                         .WithMany("Subjects")
-                        .HasForeignKey("StudentModelId");
+                        .HasForeignKey("TeacherId");
+
+                    b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("SessionSubjectsSpecialtyModel", b =>
+            modelBuilder.Entity("DbWebApplication.Models.TeacherModel", b =>
                 {
-                    b.HasOne("DbWebApplication.Models.SessionSubjects", null)
-                        .WithMany()
-                        .HasForeignKey("SessionSubjectsId")
+                    b.HasOne("DbWebApplication.Models.AppUserModel", "AppUser")
+                        .WithOne("TeacherModel")
+                        .HasForeignKey("DbWebApplication.Models.TeacherModel", "AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DbWebApplication.Models.SpecialtyModel", null)
+                    b.HasOne("DbWebApplication.Models.FacultyModel", "Faculty")
                         .WithMany()
-                        .HasForeignKey("SpecialtiesId")
+                        .HasForeignKey("FacultyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Faculty");
                 });
 
-            modelBuilder.Entity("SpecialtyModelSubjectModel", b =>
+            modelBuilder.Entity("StudyPlanSubjectModel", b =>
                 {
-                    b.HasOne("DbWebApplication.Models.SpecialtyModel", null)
+                    b.HasOne("DbWebApplication.Models.StudyPlan", null)
                         .WithMany()
-                        .HasForeignKey("SpecialtiesId")
+                        .HasForeignKey("StudyPlansId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -542,6 +741,8 @@ namespace DbWebApplication.Migrations
             modelBuilder.Entity("DbWebApplication.Models.AppUserModel", b =>
                 {
                     b.Navigation("Student");
+
+                    b.Navigation("TeacherModel");
                 });
 
             modelBuilder.Entity("DbWebApplication.Models.FacultyModel", b =>
@@ -559,6 +760,11 @@ namespace DbWebApplication.Migrations
                     b.Navigation("Pairs");
                 });
 
+            modelBuilder.Entity("DbWebApplication.Models.Session", b =>
+                {
+                    b.Navigation("SessionSubjects");
+                });
+
             modelBuilder.Entity("DbWebApplication.Models.SessionSubjects", b =>
                 {
                     b.Navigation("SessionGrades");
@@ -566,9 +772,13 @@ namespace DbWebApplication.Migrations
 
             modelBuilder.Entity("DbWebApplication.Models.SpecialtyModel", b =>
                 {
+                    b.Navigation("Sessions");
+
                     b.Navigation("SpecialtyScheduleForWeeks");
 
                     b.Navigation("Students");
+
+                    b.Navigation("StudyPlans");
                 });
 
             modelBuilder.Entity("DbWebApplication.Models.SpecialtyScheduleForWeek", b =>
@@ -578,14 +788,27 @@ namespace DbWebApplication.Migrations
 
             modelBuilder.Entity("DbWebApplication.Models.StudentModel", b =>
                 {
+                    b.Navigation("LabWorkGrades");
+
                     b.Navigation("SessionGrades");
 
-                    b.Navigation("Subjects");
+                    b.Navigation("SubjectGrades");
                 });
 
             modelBuilder.Entity("DbWebApplication.Models.SubjectModel", b =>
                 {
                     b.Navigation("LabWorks");
+
+                    b.Navigation("SessionSubjects");
+
+                    b.Navigation("SubjectGrades");
+                });
+
+            modelBuilder.Entity("DbWebApplication.Models.TeacherModel", b =>
+                {
+                    b.Navigation("SessionSubjects");
+
+                    b.Navigation("Subjects");
                 });
 #pragma warning restore 612, 618
         }

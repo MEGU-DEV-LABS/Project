@@ -1,0 +1,51 @@
+﻿@model DbWebApplication.Models.SubjectModel
+
+<h3 class="role">Нова спеціальність</h3>
+
+<form asp-action="CreateSubject" asp-controller="Subject" 
+      enctype="multipart/form-data"
+      method="post" id="form__new__work">
+
+
+    <div class="input-control">
+        <label asp-for="SubjectName">Назва</label>
+        <input asp-for="SubjectName" class="form-control" placeholder="Назва" />
+        <span asp-validation-for="SubjectName" class="text-danger error"></span>
+    </div>
+
+    <div class="input-control">
+        <label asp-for="Hours">Години</label>
+        <input asp-for="Hours" class="form-control" placeholder="Години" type="number"/>
+        <span asp-validation-for="Hours" class="text-danger error"></span>
+    </div>
+
+    <div class="input-control">
+        <label asp-for="Credits">Кредити</label>
+        <input asp-for="Credits" class="form-control" placeholder="Кредити" type="number" />
+        <span asp-validation-for="Credits" class="text-danger error"></span>
+    </div>
+
+    <div class="input-control">
+        <label for="ImageFile">Зображення</label>
+        <input type="file" name="ImageFile" class="form-control" />
+    </div>
+
+    <label for="TeacherId">Викладач</label>
+    <select name="TeacherId" id="TeacherId" class="form-control">
+        <option value="">-- Оберіть викладача --</option>
+
+        @foreach (var teacher in ViewBag.Teachers)
+        {
+            <option value="@teacher.Id">
+                @teacher.LastName @teacher.FirstName @teacher.FatherName
+            </option>
+        }
+    </select>
+
+    <input type="hidden" name="specialtyId" value="@ViewBag.SpecialtyId" />
+
+    <div class="btn__con">
+        <button class="login" type="submit">Створити</button>
+    </div>
+</form>
+

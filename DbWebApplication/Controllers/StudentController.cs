@@ -1,20 +1,23 @@
 using DbWebApplication.Enum;
 using DbWebApplication.Extensions;
+using DbWebApplication.Interfaces.IServices;
 using DbWebApplication.Models;
 using Microsoft.AspNetCore.Mvc;
 using DbWebApplication.Services;
+using DbWebApplication.ViewModels;
 using Microsoft.AspNetCore.Identity;
 
 namespace DbWebApplication.Controllers;
 
+[Route("student")]
+[AuthorizeByRole(Role.Student)]
 public class StudentController(
-    StudentService studentService,
-    UserManager<AppUserModel> userManager)
+    IStudentService studentService)
     : Controller
 {
     private int GetUserId()
     {
-        if (HttpContext.Items["UserId"] is int userId)
+        if (HttpContext.Items["userId"] is int userId)
         {
             return userId;
         }
@@ -22,61 +25,67 @@ public class StudentController(
         throw new UnauthorizedAccessException("UserId not found in the context.");
     }
 
-    [AuthorizeByRole(Role.Admin, Role.User)]
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
-        /*
-        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        */
-        if(User.IsInRole("Admin"))
-        {
-            return RedirectToAction("AdminPanel", "Admin");
-        }
         return View();
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GradesOfStudent()
+    [HttpGet("subjects")]
+    public async Task<IActionResult> StudentSubjects()
     {
-        var user = await userManager.GetUserAsync(User);
-
-        if (user == null)
+        var userId = GetUserId();
+        var student = await studentService.GetStudentById(userId);
+        var subjects = await studentService.GetSubjectsWithGrades(student.Id);
+        
+        var model = new StudentSubjectsViewModel
         {
-            return View("User not found");
-        }
+            Student = student,
+            Subjects = subjects
+        };
 
-        var student = await studentService.PrepareStudentGradesViewModelAsync(user.Id);
+        return View(model);
+    }
+    
+    [HttpGet("sessionsubjects")]
+    public async Task<IActionResult> StudentSessionSubjects()
+    {
+        var userId = GetUserId();
+        var student = await studentService.GetStudentById(userId);
+        var subjects = await studentService.GetSessionSubjectsWithGrades(student.Id);
         
-        if (typeof(StudentGradesViewModel) == null)
+        var model = new StudentSessionSubjectsViewModel
         {
-            return View();
-        }
-        
-        return View(student);
-        
+            Student = student,
+            Subjects = subjects
+        };
+
+        return View(model);
     }
 
-     /*[HttpGet]
-    public async Task<IActionResult> SubjectDetails(int id)
+    [HttpGet("edit/{id?}")]
+    public async Task<IActionResult> Edit()
     {
-        var user = await userManager.GetUserAsync(User);
-
-        if (user == null)
+        return View();
+    }
+    
+    [HttpPost("edit/{id?}")]
+    public async Task<IActionResult> Edit(StudentModel model)
+    {
+        if (!ModelState.IsValid)
         {
-            return View("User not found");
+            return View(model);
         }
 
-        var subject = await studentService.PrepareSubjectGradesViewModelAsync(id, user.Id);
+        var userId = GetUserId();
+        var student = await studentService.GetStudentById(userId);
+        
+        student.FirstName = model.FirstName;
+        student.LastName = model.LastName;
 
-        return View(subject);
-    }*/
+        await studentService.UpdateStudent(student);
 
-    [HttpGet]
-    public async Task<IActionResult> StudentZalikovka()
-    {
-        var user = await userManager.GetUserAsync(User);
-        var student = await studentService.GetStudentByUserId(user.Id);
-        var sessionSubject = await studentService.PrepareSessionSubjectViewModelAsync(student);
-        return View(sessionSubject);
+        return RedirectToAction("Index");
     }
+    
 }

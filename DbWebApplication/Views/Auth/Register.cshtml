@@ -1,0 +1,69 @@
+@using DbWebApplication.Enum
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DbWebApplication.ViewModels.RegisterUserViewModel
+
+<h3 class="form__title">Зареєструвати акаунт</h3>
+
+<form asp-action="Register" asp-controller="Auth" method="post" id="admin__form">
+   <div class="information__box">
+      <div class="input-control">
+         <label asp-for="FirstName"></label>
+         <input asp-for="FirstName" class="form-control" placeholder="Ім'я" />
+         <span asp-validation-for="FirstName" class="text-danger error"></span>
+      </div>
+
+      <div class="input-control">
+         <label asp-for="LastName"></label>
+         <input asp-for="LastName" class="form-control" placeholder="Прізвище" />
+         <span asp-validation-for="LastName" class="text-danger error"></span>
+      </div>
+   </div>
+
+   <div class="information__box">
+      <div class="input-control">
+         <label asp-for="FatherName"></label>
+         <input asp-for="FatherName" class="form-control" placeholder="Ім’я по батькові" />
+         <span asp-validation-for="FatherName" class="text-danger error"></span>
+      </div>
+
+      <div class="input-control">
+         <label asp-for="PhoneNumber"></label>
+         <input asp-for="PhoneNumber" class="form-control" placeholder="+380671234567" />
+         <span asp-validation-for="PhoneNumber" class="text-danger error"></span>
+      </div>
+   </div>
+
+   <div class="footer__form__wrapper">
+      <div class="footer__form">
+         <div class="input-control">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" placeholder="example@gmail.com" />
+            <span asp-validation-for="Email" class="text-danger error"></span>
+         </div>
+
+         <div class="input-control">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" class="form-control" type="password" placeholder="Пароль" />
+            <span asp-validation-for="Password" class="text-danger error"></span>
+         </div>
+
+         <div class="input-control">
+            <label asp-for="Role">Вибрати роль</label>
+            <select asp-for="Role" asp-items="Html.GetEnumSelectList<Role>()" class="form-select" id="person"></select>
+            <span asp-validation-for="Role" class="text-danger error"></span>
+         </div>
+
+         <div class="input-control">
+            <label asp-for="SpecialtyId">Спеціальність?</label>
+            <input asp-for="SpecialtyId" class="form-control" placeholder="ID спеціальності" />
+            <span asp-validation-for="SpecialtyId" class="text-danger error"></span>
+         </div>
+
+         <button class="admin__btn" type="submit">Зареєструвати</button>
+      </div>
+   </div>
+</form>
+
+@section Scripts {
+   <partial name="_ValidationScriptsPartial" />
+}

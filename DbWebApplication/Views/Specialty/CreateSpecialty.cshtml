@@ -1,0 +1,17 @@
+﻿@model DbWebApplication.Models.SpecialtyModel
+
+<h3 class="role">Нова спеціальність</h3>
+
+<form asp-action="CreateSpecialty" asp-controller="Specialty" method="post" id="form__new__work">
+    <input type="hidden" asp-for="FacultyId" />
+
+    <div class="input-control">
+        <label asp-for="Name">Назва</label>
+        <input asp-for="Name" class="form-control" placeholder="Назва" />
+        <span asp-validation-for="Name" class="text-danger error"></span>
+    </div>
+
+    <div class="btn__con">
+        <button class="login" type="submit">Створити</button>
+    </div>
+</form>

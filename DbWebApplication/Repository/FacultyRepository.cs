@@ -25,6 +25,15 @@ public class FacultyRepository(AppDbContext context) : IFacultyRepository
         return faculty;
     }
 
+    public async Task<FacultyModel> GetFacultyBySpecialty(int id)
+    {
+        var faculty = await context.Faculties
+            .Include(f => f.Specialties)
+            .FirstOrDefaultAsync(f => f.Specialties.Any(s => s.Id == id));
+        
+        return faculty;
+    }
+
     public async Task CreateAsync(FacultyModel faculty)
     {
         await context.Faculties.AddAsync(faculty);

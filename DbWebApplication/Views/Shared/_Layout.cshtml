@@ -5,41 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - DbWebApplication</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    @*<link rel="stylesheet" href="~/DbWebApplication.styles.css" asp-append-version="true"/>*@
     <link rel="stylesheet" href="~/css/reset.css">
     <link rel="stylesheet" href="~/css/style.css">
 </head>
 <body>
 <div class="wrapper">
-<header class="header">
-    <div class="container">
-        <div class="img__con">
-            <img src="~/images/icons/iueh-logo-gerb.png" alt="">
-
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">
+                <img src="~/images/Logo__megu.png" alt="Logo">
+            </a>
         </div>
-    </div>
-    <div style="text-align: right; border-bottom: 3px solid #000000; ">
-        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between mg" style="margin: 20px 100px 20px 20px; display: flex; align-items: center; justify-content: center;">
-            <partial name="_LoginPartial.cshtml"/>
+        <div style="text-align: right; border-bottom: 3px solid #000000; ">
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between mg" style="margin: 20px 100px 20px 20px; display: flex; align-items: center; justify-content: center;">
+                <partial name="_LoginPartial.cshtml"/>
+            </div>
         </div>
-    </div>
-</header>
-<div class="container">
-    <main role="main" class="pb-3">
+    </header>
+    <main class="main">
         <div class="container">
             @RenderBody()
         </div>
     </main>
-</div>
-<footer class="footer">
-    <div class="img__con2">
-        <img src="~/images/icons/iueh-logo-gerb.png" alt="">
+    <footer class="footer">
+    <div class="container">
+        <div class="footer__top">
+            <img src="~/images/Logo__megu__footer.png" alt="">
+            <ul class="footer__list">
+                <li class="footer__list__item">
+                    <a href="#" class="footer__link">
+                        Основний сайт університету
+                    </a>
+                </li>
+                <li class="footer__list__item">
+                    <a href="#" class="footer__link">
+                        Контакти
+                    </a>
+                </li>
+                <li class="footer__list__item">
+                    <a href="#" class="footer__link">
+                        Платіжні реквізити МЕГУ
+                    </a>
+                </li>
+                <li class="footer__list__item">
+                    <a href="#" class="footer__link">
+                        Електронні пошта
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </footer>
+</div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/main.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
-</div>
 </body>
 </html>

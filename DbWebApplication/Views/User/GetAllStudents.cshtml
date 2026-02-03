@@ -1,0 +1,29 @@
+﻿@model IEnumerable<DbWebApplication.Models.AppUserModel>
+
+
+
+<div class="container__list">
+    <h3 class="student__title">
+        Список студентів
+    </h3>
+    <div class="list__top">
+        <p class="list__top__text">ПІБ</p>
+        <p class="list__top__text">Група</p>
+        <p class="list__top__text">Факультет</p>
+        <p class="list__top__text">Кнопка qr</p>
+    </div>
+
+    @foreach (var user in Model)
+    {
+        <div class="list__info">
+            <p class="list__info__text">@user.LastName @user.FirstName @user.FatherName</p>
+            <p class="list__info__text">@user.Student?.Specialty?.Name</p>
+            <p class="list__info__text">@user.Student?.Specialty?.Faculty?.Name</p>
+            <form asp-action="GenerateQrCode" asp-controller="Auth" method="post">
+               <input type="hidden" name="id" value="@user.Id" />
+              <button type="submit" class="list__info__btn">Згенерувати QR</button>
+            </form>
+        </div>
+    }
+
+</div>

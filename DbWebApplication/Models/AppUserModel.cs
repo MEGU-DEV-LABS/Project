@@ -1,4 +1,5 @@
-﻿using DbWebApplication.Enum;
+﻿using System;
+using DbWebApplication.Enum;
 
 namespace DbWebApplication.Models;
 
@@ -15,6 +16,8 @@ public class AppUserModel
     
     public int? StudentId { get; set; }
     public StudentModel? Student { get; set; }
+    public int? TeacherId { get; set; }
+    public TeacherModel? TeacherModel { get; set; }
     
     //QR Code fields
     public Guid? QrCodeToken { get; set; }

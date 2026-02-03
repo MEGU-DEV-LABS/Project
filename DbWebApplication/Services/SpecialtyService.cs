@@ -1,13 +1,15 @@
 ﻿using DbWebApplication.Interfaces;
+using DbWebApplication.Interfaces.IRepositories;
+using DbWebApplication.Interfaces.IServices;
 using DbWebApplication.Models;
 
 namespace DbWebApplication.Services;
 
-public class SpecialtyService(ISpecialtyRepository repository)
+public class SpecialtyService(ISpecialtyRepository repository) : ISpecialtyService
 {
-    public async Task<List<SpecialtyModel>> GetSpecialties()
+    public async Task<List<SpecialtyModel>> GetSpecialties(int facultyId)
     {
-        var specialties = await repository.GetAllAsync();
+        var specialties = await repository.GetAllAsync( facultyId);
         return specialties;
     }
 
@@ -43,5 +45,21 @@ public class SpecialtyService(ISpecialtyRepository repository)
         }
 
         await repository.Delete(specialty.Id);
+    }
+    
+    public async Task AddSubjectsToStudyPlan(int specialtyId, StudyPlan studyPlan)
+    {
+        await repository.AddSubjectsToStudyPlan(specialtyId, studyPlan);
+    }
+    
+    public async Task AddStudents(List<StudentModel> students, int specialtyId)
+    {
+        await repository.AddStudents(students, specialtyId);
+    }
+    
+    public async Task<List<StudentModel>> GetStudentsBySpecialtyId(int specialtyId)
+    {
+        var students = await repository.GetStudentsBySpecialty(specialtyId);
+        return students;
     }
 }

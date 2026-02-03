@@ -9,7 +9,8 @@ builder.Services
     .AddAppCookie()
     .AddDbCustomContext(builder.Configuration)
     .AddRepositories()
-    .AddAuthExtensions();
+    .AddAuthExtensions()
+    .AddRazorPages();
 
 var app = builder.Build();
 
@@ -18,15 +19,22 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-app.UseMiddleware<UserIdMiddleware>();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseMiddleware<UserIdMiddleware>();
 app.UseAuthentication();   
-app.UseAuthorization();  
+app.UseAuthorization(); 
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/Auth/Redirect");
+    return Task.CompletedTask;
+});
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Student}/{action=Index}/{id?}");
+    pattern: "{controller=Auth}/{action=Login}");
 app.MapRazorPages();
+
 
 app.Run();

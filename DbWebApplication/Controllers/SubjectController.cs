@@ -1,8 +1,103 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DbWebApplication.Data;
+using DbWebApplication.Interfaces;
+using DbWebApplication.Interfaces.IServices;
+using DbWebApplication.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DbWebApplication.Controllers;
 
-public class SubjectController : Controller
+public class SubjectController(ISubjectService service, AppDbContext context) : Controller
 {
+    [HttpGet("subjects")]
+    public async Task<IActionResult> AllSubjects()
+    {
+        var subjects = await service.GetAllSubjectsAsync();
+        foreach (var subject in subjects)
+        {
+            if (subject.ImageData != null)
+            {
+                subject.ImageBase64 = Convert.ToBase64String(subject.ImageData);
+            }
+        }
+        return View(subjects);
+    }
     
+    [HttpGet("showSubject/{id}")]
+    public async Task<IActionResult> ShowSubject(int id)
+    {
+        var subject = await service.GetSubjectByIdAsync(id);
+        
+        if (subject == null)
+        {
+            return NotFound();
+        }
+        
+        return View(subject);
+    }
+    
+    [HttpGet("create")]
+    public IActionResult CreateSubject(int specialtyId)
+    {
+        var teachers = context.Teachers.ToList();
+        ViewBag.Teachers = teachers;
+        ViewBag.SpecialtyId = specialtyId;
+        return View();
+    }
+    
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateSubject(SubjectModel model, IFormFile ImageFile, int specialtyId)
+    {
+        if (ImageFile != null && ImageFile.Length > 0)
+        {
+            using (var ms = new MemoryStream())
+            {
+                await ImageFile.CopyToAsync(ms);
+                model.ImageData = ms.ToArray();
+            }
+        }
+        await service.CreateSubjectAsync(model, specialtyId);
+        
+        return RedirectToAction("AllSubjects");
+    }
+    
+    [HttpGet("edit/{id}")]
+    public async Task<IActionResult> EditSubject(int id)
+    {
+        var subject = await service.GetSubjectByIdAsync(id);
+        
+        if (subject == null)
+        {
+            return NotFound();
+        }
+        
+        return View(subject);
+    }
+    
+    [HttpPost("edit/{id}")]
+    public async Task<IActionResult> EditSubject(SubjectModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+        
+        await service.UpdateSubjectAsync(model);
+        
+        return RedirectToAction("AllSubjects");
+    }
+    
+    [HttpPost("delete/{id}")]
+    public async Task<IActionResult> DeleteSubject(int id)
+    {
+        try
+        {
+            await service.DeleteSubjectAsync(id);
+        }
+        catch (NullReferenceException)
+        {
+            return NotFound();
+        }
+        
+        return RedirectToAction("AllSubjects");
+    }
 }

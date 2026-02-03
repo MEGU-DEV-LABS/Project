@@ -35,7 +35,12 @@ public class UserIdMiddleware
 
                     var identity = new ClaimsIdentity(claims, "custom");
                     var principal = new ClaimsPrincipal(identity);
-
+                    
+                    if (int.TryParse(userIdClaim.Value, out int parsedId))
+                    {
+                        context.Items["userId"] = parsedId;
+                    }
+                    
                     context.User = principal; 
                 }
             }

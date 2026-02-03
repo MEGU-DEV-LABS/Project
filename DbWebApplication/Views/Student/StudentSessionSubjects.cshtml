@@ -1,0 +1,257 @@
+@using DbWebApplication.Helpers
+@model DbWebApplication.ViewModels.StudentSessionSubjectsViewModel
+
+<style>
+        body {
+            /*font-family: Arial, sans-serif;
+            margin: 20px;*/
+        }
+
+        .container {
+            max-width: 1220px;
+            padding: 0 10px;
+            margin: 0 auto;
+        }
+
+        .inner__table {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .header {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .subheader {
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .th {
+            text-align: center;
+        }
+        .swiper {
+            max-width: 1000px;
+            min-height: 800px;
+        }
+
+        .container__card {
+            max-width: 700px;
+            border: 2px solid black;
+            padding: 20px;
+            margin: 0 auto;
+        }
+        .header__card {
+            text-align: center;
+            font-size: 1.125rem;
+            font-weight: bold;
+            margin-bottom: 1.25rem;
+        }
+        .subheader__card {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 1.25rem;
+        }
+        .content__card {
+            display: flex;
+            flex-wrap: wrap;
+            column-gap: 3px;
+
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        .photo__card img {
+            aspect-ratio: 3 / 4; /* Пропорції 3:4 */
+            margin-right: 1.25rem;
+            border: 1px solid black;
+            background: #f2f2f2;
+            width: 100%; /* Ширина 100% у межах батьківського контейнера */
+            max-width: 6.25rem; /* Максимальна ширина */
+            min-height: 8.3125rem; /* Це обмеження ширини */
+        }
+        .info__card {
+            overflow: hidden;
+        }
+        .stamp__card {
+            margin-top: 20px;
+            width: 200px;
+            height: 100px;
+            border: 1px solid black;
+            text-align: center;
+            background: #f2f2f2;
+        }
+        .signatures__card {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .signatures__card div {
+            margin-bottom: 10px;
+        }
+
+        .date__card {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        @@media (max-width: 510px) {
+            .sub__info__card {
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .date__card {
+                text-align: center;
+            }
+
+            .signatures__card {
+                text-align: center;
+            }
+        }
+
+        .container_test {
+            max-width: 1220px;
+            padding: 0 10px;
+            margin: 0 auto;
+        }
+        .subheader__test {
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .header__test {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .container__exam {
+            max-width: 900px;
+
+            padding: 20px;
+            margin: 0 auto;
+        }
+
+        .header__exam {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .subheader__exam {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .footer__exam {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+
+<div class="container">
+    <div class="swiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="container__card">
+                    <div class="header__card">
+                        Міністерство освіти і науки України<br />
+                        Приватний вищий навчальний заклад<br />
+                        «Міжнародний економіко-гуманітарний університет<br />
+                        імені академіка Степана Дем’янчука»
+                    </div>
+                    <div class="subheader__card">
+                        ЗАЛІКОВА КНИЖКА<br />
+                        СТУДЕНТА СТУПЕНЯ ВИЩОЇ ОСВІТИ «БАКАЛАВР»
+                    </div>
+                    <div class="content__card">
+                        <div class="photo__card">
+                            <img src="~/images/photo_2024-12-09_16-08-37.jpg" alt="" />
+                        </div>
+                        <div class="info__card">
+                            <strong>Прізвище, ім’я, по батькові:</strong> @Model.Student.LastName
+                            @Model.Student.FirstName @Model.Student.FatherName<br />
+                            <strong>Інститут, факультет:</strong> @Model.Student.Specialty?.Faculty?.Name<br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @foreach (var subject in Model.Subjects)
+            {
+                <div class="swiper-slide">
+                    <div class="container_test">
+                        <div class="header__test">
+                            1-й семестр 2023 / 2024 навчального року
+                        </div>
+
+                        <div class="subheader__test">Екзамени</div>
+
+                        <div class="inner__table">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>Назва навчальної дисципліни</th>
+                                    <th>Годин</th>
+                                    <th>Кредитів</th>
+                                    <th>Екзаменатор</th>
+                                    <th>За національною шкалою</th>
+                                    <th>Кількість балів</th>
+                                    <th>ECTS</th>
+                                    <th>Дата складання</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>@(Model.Subjects.IndexOf(subject) + 1)</td>
+                                    <td>@subject.SubjectName</td>
+                                    <td>@subject.Hours</td>
+                                    <td>@subject.Credits</td>
+                                    <td>@subject.Teacher.LastName @subject.Teacher.FirstName[0].
+                                        @subject.Teacher.FatherName[0].</td>
+                                    <td>@GradeHelper.NationalGrade(@subject.Points.Value)</td>
+                                    <td>@subject.Points</td>
+                                    <td>@GradeHelper.ECTS_Grade(subject.Points.Value)</td>
+                                    <td>@*@subject.ExamDate.ToString("dd.MM")*@</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="qwe2">
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="js/main.js"></script>
+<script src="score/js/main.js"></script>

@@ -1,0 +1,11 @@
+@model IEnumerable<DbWebApplication.Models.FacultyModel>
+          
+<h3 class="role">Факультети</h3>
+<div class="faculty__inner">
+    @foreach (var faculty in Model)
+    {
+        <div class="faculty__box">
+            <a href="@Url.Action("ShowFaculty", "Faculty", new { id = faculty.Id })" class="faculty__text">@faculty.Name</a>
+        </div>
+    }
+</div>

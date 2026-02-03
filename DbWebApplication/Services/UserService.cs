@@ -1,61 +1,20 @@
 ﻿using DbWebApplication.Data;
+using DbWebApplication.Dto;
 using DbWebApplication.Models;
 using DbWebApplication.ViewModels;
 using DbWebApplication.Enum;
+using DbWebApplication.Interfaces;
+using DbWebApplication.Interfaces.IServices;
 using DbWebApplication.Repository;
 using Microsoft.AspNetCore.Identity;
 
 namespace DbWebApplication.Services;
 
-public class UserService(AppDbContext context,
-    UserManager<AppUserModel> userManager,
+public class UserService(
     IHttpContextAccessor httpContextAccessor,
-    UserRepository userRepository,
-    StudentRepository studentRepository)
+    IUserRepository userRepository,
+    IStudentRepository studentRepository) : IUserService
 {
-    public AppUserModel CreateUser()
-    {
-        try
-        {
-            return Activator.CreateInstance<AppUserModel>();
-        }
-        catch
-        {
-            throw new InvalidOperationException($"Can't create an instance of '{nameof(AppUserModel)}'. " +
-                                                $"Ensure that '{nameof(AppUserModel)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                                                $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
-        }
-    }
-    
-    public async Task GetRolesAsync(AppUserModel user, RegisterViewModel model)
-    {
-        if (model.Role == Role.Admin)
-        {
-            await userManager.AddToRoleAsync(user, "Admin");
-        }
-        else
-        {
-            await userManager.AddToRoleAsync(user, "User");
-        }
-    }
-    
-    public async Task CreateStudentIfNotAdmin(RegisterViewModel model, AppUserModel user)
-    {
-        if (model.Role != Role.Admin)
-        {
-            var student = new StudentModel
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                FatherName = model.FatherName,
-                Id = user.Id 
-            };
-            
-            await context.Students.AddAsync(student);
-            await context.SaveChangesAsync();
-        }
-    }
-    
     public int GetUserId()
     {
         if (httpContextAccessor.HttpContext?.Items["UserId"] is int userId)
@@ -77,6 +36,16 @@ public class UserService(AppDbContext context,
         
         return user;
     }
+    
+    public async Task<List<AppUserModel>> GetUsers()
+    {
+        var users = await userRepository.GetUsers();
+        if (users == null || !users.Any())
+        {
+            throw new NullReferenceException("No users found");
+        }
+        return users;
+    }
 
     public async Task<StudentModel> GetStudentByUserId(int userId)
     {
@@ -86,5 +55,30 @@ public class UserService(AppDbContext context,
             throw new NullReferenceException("User not found");
         }
         return student;
+    }
+    
+    public async Task UpdateUser(AppUserModel userModel)
+    {
+        if (userModel == null)
+        {
+            throw new ArgumentNullException(nameof(userModel), "User model cannot be null");
+        }
+
+        await userRepository.Update(userModel);
+    }
+
+    public async Task DeleteUser(int userId)
+    {
+        await userRepository.Delete(userId);
+    }
+
+    public async Task AddQrTokenToStudentAsync(AppUserModel user)
+    {
+        await userRepository.AddQrTokenToStudentAsync(user);
+    }
+
+    public async Task<AppUserModel> GetStudentByQrToken(string token)
+    {
+        return await userRepository.GetStudentByQrToken(token);
     }
 }

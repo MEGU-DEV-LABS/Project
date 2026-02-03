@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="css/style.css">
+   <link rel="stylesheet" href="css/reset.css">
+   <script src="https://cdn.jsdelivr.net/npm/inputmask@5.0.9/dist/inputmask.min.js"></script>
+   <script defer src="js/main.js"></script>
+   <title>Document</title>
+
+</head>
+<body>
+  <div class="wrapper">
+   <header class="header">
+      <div class="container">
+         <a href="#" class="logo">
+            <img src="images/Logo__megu.png" alt="Logo">
+         </a>
+      </div>
+   </header>
+
+   <main class="main">
+      <div class="container">
+         
+         <h3 class="form__title">Відомості про акаунт</h3>
+         <form id="admin__form__setings">
+            <div class="information__box">
+               <div class="input-control">
+                  <label>ім'я</label>
+                  <input id="admin__first__name__setings" name="name" type="text" placeholder="ім'я">
+                  <div class="error"></div>
+                  
+               </div>
+               <div class="input-control">
+                  <label>Прізвище</label>
+                  <input id="admin__second__name__setings" name="second__name" type="text" placeholder="Прізвище" >
+                  <div class="error"></div>
+                  
+               </div>
+               
+            </div>
+            <div class="information__box">
+               <div class="input-control">
+                  <label>Ім’я по батькові</label>
+                  <input id="admin__father__name__setings" name="father__name" type="text" placeholder="Ім’я по батькові">
+                  <div class="error"></div>
+                  
+               </div>
+               <div class="input-control">
+                  <label>Номер телефону</label>
+                  <input id="admin__phone__setings" name="name" type="tel" placeholder="+380671234567">
+                  <div class="error"></div>
+                  
+               </div>
+               
+            </div>
+            <div class="footer__form__wrapper">
+               <div class="information__box">
+                  <div class="input-control">
+                     <label>Пошта</label>
+                     <input id="email__admin__setings" name="name" type="email" placeholder="example@gmail.com">
+                     <div class="error"></div>
+               </div>
+                <div class="input-control">
+                     
+                     <label>Вибрати роль</label>
+                     <select name="role__person" id="person">
+                        <option value="student" selected>студент</option>
+                        <option value="teacher">Викладач</option>
+                     </select>
+                     
+                  
+                 
+                </div>
+                  <button class="admin__btn" type="submit">Редагувати</button>
+
+                  
+            
+            
+         </form>
+      </div>
+   </main>
+
+   <footer class="footer">
+      <div class="container">
+         <div class="footer__top">
+            <img src="images/Logo__megu__footer.png" alt="">
+            <ul class="footer__list">
+               <li class="footer__list__item">
+                  <a href="#" class="footer__link">
+                     Основний сайт університету
+                  </a>
+               </li>
+               <li class="footer__list__item">
+                  <a href="#" class="footer__link">
+                     Контакти
+                  </a>
+               </li>
+               <li class="footer__list__item">
+                  <a href="#" class="footer__link">
+                     Платіжні реквізити МЕГУ
+                  </a>
+               </li>
+               <li class="footer__list__item">
+                  <a href="#" class="footer__link">
+                     Електронні пошта
+                  </a>
+               </li>
+            </ul>
+         </div>
+      </div>
+   </footer>
+  </div>
+ 
+</body>
+</html>

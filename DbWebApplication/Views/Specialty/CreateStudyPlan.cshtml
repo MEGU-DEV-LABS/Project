@@ -1,0 +1,425 @@
+@model List<SubjectModel>
+
+<style>
+
+    h1 {
+        font-size: 2.25rem;
+        font-weight: 800;
+        color: #3730a3;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .columns-wrapper {
+        display: flex;
+        flex-direction: row;
+        gap: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    .column {
+        flex: 1;
+        background: white;
+        padding: 1.25rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+    }
+
+    .column h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .column h2.available {
+        color: #4338ca;
+        border-bottom: 2px solid #c7d2fe;
+    }
+
+    .column h2.picked {
+        color: #15803d;
+        border-bottom: 2px solid #bbf7d0;
+    }
+
+    .subjects-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        max-height: 24rem;
+        overflow-y: auto;
+        padding-right: 0.5rem;
+    }
+
+    .subjects-list::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .subjects-list::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 4px;
+    }
+
+    .subjects-list::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+
+    .subject-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        font-size: 1.125rem;
+        transition: all 0.2s ease-in-out;
+        border: 1px solid;
+        cursor: pointer;
+    }
+
+    .subject-item.available {
+        background-color: #f9fafb;
+        color: #374151;
+        border-color: #e5e7eb;
+    }
+
+    .subject-item.available:hover {
+        background-color: #f3f4f6;
+        color: #1f2937;
+    }
+
+    .subject-item.selected {
+        background-color: #e0e7ff;
+        color: #3730a3;
+        border-color: #a5b4fc;
+        font-weight: 500;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .subject-item.picked {
+        background-color: #f0fdf4;
+        color: #15803d;
+        border-color: #bbf7d0;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .checkmark {
+        width: 1.25rem;
+        height: 1.25rem;
+        color: #4f46e5;
+    }
+
+    .remove-btn {
+        margin-left: 1rem;
+        padding: 0.25rem;
+        color: #16a34a;
+        background: none;
+        border: none;
+        cursor: pointer;
+        border-radius: 9999px;
+        transition: all 0.2s;
+    }
+
+    .remove-btn:hover {
+        color: #b91c1c;
+    }
+
+    .remove-btn:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px #fca5a5;
+    }
+
+    .remove-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    .middle-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem 0;
+    }
+
+    .move-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 9999px;
+        color: white;
+        font-weight: bold;
+        font-size: 1.125rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .move-btn:enabled {
+        background-color: #4f46e5;
+    }
+
+    .move-btn:enabled:hover {
+        background-color: #4338ca;
+    }
+
+    .move-btn:enabled:focus {
+        outline: none;
+        box-shadow: 0 0 0 4px #c7d2fe;
+    }
+
+    .move-btn:disabled {
+        background-color: #9ca3af;
+        cursor: not-allowed;
+    }
+
+    .submit-btn {
+        padding: 0.75rem 2rem;
+        border-radius: 9999px;
+        color: white;
+        font-weight: bold;
+        font-size: 1.125rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .submit-btn:enabled {
+        background-color: #16a34a;
+    }
+
+    .submit-btn:enabled:hover {
+        background-color: #15803d;
+    }
+
+    .submit-btn:enabled:focus {
+        outline: none;
+        box-shadow: 0 0 0 4px #bbf7d0;
+    }
+
+    .submit-btn:disabled {
+        background-color: #9ca3af;
+        cursor: not-allowed;
+    }
+
+    .empty-message {
+        color: #6b7280;
+        text-align: center;
+        padding: 1rem 0;
+    }
+
+    .form-footer {
+        display: flex;
+        justify-content: flex-end;
+        padding-top: 1rem;
+        border-top: 1px solid #e5e7eb;
+        margin-top: 1.5rem;
+    }
+</style>
+
+
+<h1>Subject Picker for Enrollment</h1>
+
+<div class="columns-wrapper">
+  <!-- Left Column: Available Subjects -->
+  <div class="column">
+    <h2 class="available">Available Subjects</h2>
+    <div class="subjects-list" id="availableSubjects">
+        @foreach (var subject in Model)
+        {
+            
+        }
+    </div>
+  </div>
+
+  <!-- Middle Section: Action Button -->
+  <div class="middle-section">
+    <button class="move-btn" id="moveBtn" disabled>Move Selected &gt;&gt;</button>
+  </div>
+
+  <!-- Right Column: Form with Picked Subjects -->
+  <div class="column">
+    <h2 class="picked">Subjects for Form</h2>
+    <form id="subjectForm" method="post" asp-action="CreateStudyPlan" asp-controller="Specialty">
+        <input type="hidden" name="specialtyId" value="@ViewBag.SpecialtyId" />
+        <div class="subjects-list" id="pickedSubjects"></div>
+        <div class="form-footer">
+            <button type="submit" class="submit-btn" id="submitBtn" disabled>Submit Subjects</button>
+        </div>
+    </form>
+  </div>
+</div>
+
+
+ <script>
+    const initialAllSubjects = [
+        @foreach (var subject in Model)
+        {
+            @:{ id: @subject.SubjectID, name: '@Html.Raw(subject.SubjectName)' },
+        }
+    ];
+
+    const specialtyId = @ViewBag.SpecialtyId;
+
+    let availableSubjects = [...initialAllSubjects].sort((a, b) => a.name.localeCompare(b.name));
+    let selectedSubjects = [];
+    let pickedSubjectsForForm = [];
+
+    const availableSubjectsContainer = document.getElementById('availableSubjects');
+    const pickedSubjectsContainer = document.getElementById('pickedSubjects');
+    const moveBtn = document.getElementById('moveBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const subjectForm = document.getElementById('subjectForm');
+
+    function renderAvailableSubjects() {
+        availableSubjectsContainer.innerHTML = '';
+        
+        if (availableSubjects.length === 0) {
+            availableSubjectsContainer.innerHTML = '<p class="empty-message">All subjects have been moved.</p>';
+            return;
+        }
+
+        availableSubjects.forEach(subject => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = `subject-item ${selectedSubjects.some(s => s.id === subject.id) ? 'selected' : 'available'}`;
+            button.onclick = () => toggleSelectSubject(subject);
+            
+            const span = document.createElement('span');
+            span.textContent = subject.name;
+            button.appendChild(span);
+
+            if (selectedSubjects.some(s => s.id === subject.id)) {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('class', 'checkmark');
+                svg.setAttribute('viewBox', '0 0 20 20');
+                svg.setAttribute('fill', 'currentColor');
+                
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('fill-rule', 'evenodd');
+                path.setAttribute('d', 'M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z');
+                path.setAttribute('clip-rule', 'evenodd');
+                
+                svg.appendChild(path);
+                button.appendChild(svg);
+            }
+
+            availableSubjectsContainer.appendChild(button);
+        });
+    }
+
+    function renderPickedSubjects() {
+        pickedSubjectsContainer.innerHTML = '';
+        
+        if (pickedSubjectsForForm.length === 0) {
+            pickedSubjectsContainer.innerHTML = '<p class="empty-message">No subjects picked yet. Select from the left.</p>';
+            submitBtn.disabled = true;
+            return;
+        }
+
+        pickedSubjectsForForm.forEach(subject => {
+            const div = document.createElement('div');
+            div.className = 'subject-item picked';
+            
+            // Приховане поле для кожного предмету
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'subjectIds'; // Точна назва параметра з контролера
+            hiddenInput.value = subject.id;
+            div.appendChild(hiddenInput);
+            
+            const span = document.createElement('span');
+            span.textContent = subject.name;
+            div.appendChild(span);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'remove-btn';
+            removeBtn.setAttribute('aria-label', `Remove ${subject.name}`);
+            removeBtn.onclick = () => handleRemoveFromForm(subject);
+
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('class', 'remove-icon');
+            svg.setAttribute('viewBox', '0 0 20 20');
+            svg.setAttribute('fill', 'currentColor');
+            
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('fill-rule', 'evenodd');
+            path.setAttribute('d', 'M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z');
+            path.setAttribute('clip-rule', 'evenodd');
+            
+            svg.appendChild(path);
+            removeBtn.appendChild(svg);
+            div.appendChild(removeBtn);
+
+            pickedSubjectsContainer.appendChild(div);
+        });
+
+        submitBtn.disabled = false;
+    }
+
+    function toggleSelectSubject(subject) {
+        const index = selectedSubjects.findIndex(s => s.id === subject.id);
+        if (index !== -1) {
+            selectedSubjects.splice(index, 1);
+        } else {
+            selectedSubjects.push(subject);
+        }
+        
+        moveBtn.disabled = selectedSubjects.length === 0;
+        renderAvailableSubjects();
+    }
+
+    function handleMoveToForm() {
+        if (selectedSubjects.length === 0) return;
+
+        pickedSubjectsForForm = [...pickedSubjectsForForm, ...selectedSubjects]
+            .sort((a, b) => a.name.localeCompare(b.name));
+        
+        availableSubjects = availableSubjects
+            .filter(s => !selectedSubjects.some(sel => sel.id === s.id))
+            .sort((a, b) => a.name.localeCompare(b.name));
+        
+        selectedSubjects = [];
+
+        moveBtn.disabled = true;
+        renderAvailableSubjects();
+        renderPickedSubjects();
+    }
+
+    function handleRemoveFromForm(subjectToRemove) {
+        pickedSubjectsForForm = pickedSubjectsForForm.filter(s => s.id !== subjectToRemove.id);
+        availableSubjects = [...availableSubjects, subjectToRemove]
+            .sort((a, b) => a.name.localeCompare(b.name));
+
+        renderAvailableSubjects();
+        renderPickedSubjects();
+    }
+
+    function handleSubmitForm(event) {
+        event.preventDefault();
+        
+        if (pickedSubjectsForForm.length === 0) {
+            alert('Please select at least one subject');
+            return;
+        }
+
+        console.log('Submitting:', {
+            specialtyId: specialtyId,
+            subjectIds: pickedSubjectsForForm.map(s => s.id)
+        });
+        
+        // Відправка форми на сервер
+        subjectForm.submit();
+    }
+
+    // Event listeners
+    moveBtn.addEventListener('click', handleMoveToForm);
+    subjectForm.addEventListener('submit', handleSubmitForm);
+
+    // Initial render
+    renderAvailableSubjects();
+    renderPickedSubjects();
+</script>
