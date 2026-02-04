@@ -46,7 +46,7 @@
       <None Include="wwwroot\images\Групова динаміка.svg" />
       <None Include="wwwroot\images\Пайтон.svg" />
       <None Include="wwwroot\images\Філософія_1.svg" />
-      <None Include="wwwroot\js\main.js" />
+      <None Remove="Views\Student\score\js\swiper.js" />
     </ItemGroup>
 
     <ItemGroup>

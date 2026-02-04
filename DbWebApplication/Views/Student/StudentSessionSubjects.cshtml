@@ -173,7 +173,6 @@
         }
     </style>
 
-<div class="container">
     <div class="swiper">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
@@ -201,57 +200,143 @@
                 </div>
             </div>
 
-            @foreach (var subject in Model.Subjects)
+            @foreach (var semester in Model.Semesters)
             {
+                // ======================
+                // ЗАЛІКИ
+                // ======================
                 <div class="swiper-slide">
                     <div class="container_test">
+
                         <div class="header__test">
-                            1-й семестр 2023 / 2024 навчального року
+                            @semester.SemesterNumber семестр
+                        </div>
+
+                        <div class="subheader__test">Заліки</div>
+
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Назва дисципліни</th>
+                                <th>Години</th>
+                                <th>Кредити</th>
+                                <th>Викладач</th>
+                                <th>Оцінка</th>
+                                <th>Бали</th>
+                                <th>ECTS</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            @{
+                                int index = 1;
+                            }
+
+                            @foreach (var subject in semester.ZalikSubjects)
+                            {
+                                <tr>
+                                    <td>@index</td>
+                                    <td>@subject.SubjectName</td>
+                                    <td>@subject.Hours</td>
+                                    <td>@subject.Credits</td>
+                                    <td>
+                                        @subject.Teacher?.LastName
+                                        @subject.Teacher?.FirstName[0].
+                                        @subject.Teacher?.FatherName[0].
+                                    </td>
+
+                                    @if (subject.Points != null)
+                                    {
+                                        <td>@GradeHelper.NationalGrade(subject.Points.Value)</td>
+                                        <td>@subject.Points</td>
+                                        <td>@GradeHelper.ECTS_Grade(subject.Points.Value)</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    }
+                                </tr>
+
+                                index++;
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                // ======================
+                // ЕКЗАМЕНИ
+                // ======================
+                <div class="swiper-slide">
+                    <div class="container_test">
+
+                        <div class="header__test">
+                            @semester.SemesterNumber семестр
                         </div>
 
                         <div class="subheader__test">Екзамени</div>
 
-                        <div class="inner__table">
-                            <table>
-                                <thead>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Назва дисципліни</th>
+                                <th>Години</th>
+                                <th>Кредити</th>
+                                <th>Викладач</th>
+                                <th>Оцінка</th>
+                                <th>Бали</th>
+                                <th>ECTS</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            @{
+                                int index2 = 1;
+                            }
+
+                            @foreach (var subject in semester.ExamSubjects)
+                            {
                                 <tr>
-                                    <th>№</th>
-                                    <th>Назва навчальної дисципліни</th>
-                                    <th>Годин</th>
-                                    <th>Кредитів</th>
-                                    <th>Екзаменатор</th>
-                                    <th>За національною шкалою</th>
-                                    <th>Кількість балів</th>
-                                    <th>ECTS</th>
-                                    <th>Дата складання</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>@(Model.Subjects.IndexOf(subject) + 1)</td>
+                                    <td>@index2</td>
                                     <td>@subject.SubjectName</td>
                                     <td>@subject.Hours</td>
                                     <td>@subject.Credits</td>
-                                    <td>@subject.Teacher.LastName @subject.Teacher.FirstName[0].
-                                        @subject.Teacher.FatherName[0].</td>
-                                    <td>@GradeHelper.NationalGrade(@subject.Points.Value)</td>
-                                    <td>@subject.Points</td>
-                                    <td>@GradeHelper.ECTS_Grade(subject.Points.Value)</td>
-                                    <td>@*@subject.ExamDate.ToString("dd.MM")*@</td>
+                                    <td>
+                                        @subject.Teacher?.LastName
+                                        @subject.Teacher?.FirstName[0].
+                                        @subject.Teacher?.FatherName[0].
+                                    </td>
+
+                                    @if (subject.Points != null)
+                                    {
+                                        <td>@GradeHelper.NationalGrade(subject.Points.Value)</td>
+                                        <td>@subject.Points</td>
+                                        <td>@GradeHelper.ECTS_Grade(subject.Points.Value)</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    }
                                 </tr>
-                                </tbody>
-                            </table>
-                        </div>
+
+                                index2++;
+                            }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             }
+
         </div>
     </div>
     <div class="qwe2">
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div>
     </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script src="js/main.js"></script>
-<script src="score/js/main.js"></script>

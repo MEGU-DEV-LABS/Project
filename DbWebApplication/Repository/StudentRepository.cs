@@ -102,8 +102,11 @@ public class  StudentRepository(AppDbContext context) : IStudentRepository
     {
         var student = await context.Students
             .Include(s => s.SessionGrades)
-            .ThenInclude(sg => sg.SessionSubject)
-            .ThenInclude(t=> t.Teacher)
+                .ThenInclude(sg => sg.SessionSubject)
+                    .ThenInclude(s=>s.Session)
+            .Include(s => s.SessionGrades)
+                .ThenInclude(sg => sg.SessionSubject)
+                    .ThenInclude(t=> t.Teacher)
             .FirstOrDefaultAsync(s => s.Id == studentId);
 
         if (student == null)

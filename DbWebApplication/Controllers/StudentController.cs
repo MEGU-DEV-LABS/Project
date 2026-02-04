@@ -54,10 +54,27 @@ public class StudentController(
         var student = await studentService.GetStudentById(userId);
         var subjects = await studentService.GetSessionSubjectsWithGrades(student.Id);
         
+        var semesters = subjects
+            .GroupBy(s => s.Session.SemesterNumber)
+            .Select(g => new SemesterSubjectsViewModel
+            {
+                SemesterNumber = g.Key,
+
+                ZalikSubjects = g
+                    .Where(s => s.Type == Zalik_Ispit.Zalik)
+                    .ToList(),
+
+                ExamSubjects = g
+                    .Where(s => s.Type == Zalik_Ispit.Ispit)
+                    .ToList()
+            })
+            .OrderBy(s => s.SemesterNumber)
+            .ToList();
+
         var model = new StudentSessionSubjectsViewModel
         {
             Student = student,
-            Subjects = subjects
+            Semesters = semesters
         };
 
         return View(model);
