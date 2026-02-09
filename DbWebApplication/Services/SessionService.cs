@@ -31,4 +31,9 @@ public class SessionService(ISessionRepository repository) : ISessionService
     {
         await repository.SetGradeAsync(sessionId, studentId, subjectId, grade);
     }
+
+    public async Task<bool> SessionLastNew(int specialtyId)
+    {
+       return await repository.SessionLastNew(specialtyId);
+    }
 }

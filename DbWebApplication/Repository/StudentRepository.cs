@@ -85,6 +85,8 @@ public class  StudentRepository(AppDbContext context) : IStudentRepository
             SubjectId = subjectGrade.Subject.SubjectID,
             SubjectName = subjectGrade.Subject.SubjectName,
             SubjectGrade = subjectGrade.Grade,
+            ImageData = subjectGrade.Subject.ImageData,
+            ImageBase64 = subjectGrade.Subject.ImageBase64,
             LabWorks = student.LabWorkGrades
                 .Where(lg => lg.LabWork.SubjectID == subjectGrade.Subject.SubjectID)
                 .Select(lg => new LabWithGradeDto

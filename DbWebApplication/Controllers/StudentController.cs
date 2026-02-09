@@ -38,6 +38,14 @@ public class StudentController(
         var student = await studentService.GetStudentById(userId);
         var subjects = await studentService.GetSubjectsWithGrades(student.Id);
         
+        foreach (var subject in subjects)
+        {
+            if (subject.ImageData != null)
+            {
+                subject.ImageBase64 = Convert.ToBase64String(subject.ImageData);
+            }
+        }
+        
         var model = new StudentSubjectsViewModel
         {
             Student = student,

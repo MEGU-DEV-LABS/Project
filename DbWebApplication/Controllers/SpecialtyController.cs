@@ -48,7 +48,7 @@ public class SpecialtyController(
     [HttpGet]
     public async Task<IActionResult> CreateSpecialty(int id)
     {
-        var model = new SpecialtyModel
+        var model = new CreateSpecialtyViewModel
         {
             FacultyId = id
         };
@@ -58,9 +58,20 @@ public class SpecialtyController(
 
     
     [HttpPost]
-    public async Task<IActionResult> CreateSpecialty(SpecialtyModel model)
+    public async Task<IActionResult> CreateSpecialty(CreateSpecialtyViewModel model)
     {
-        await specialtyService.AddSpecialty(model);
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+        
+        SpecialtyModel specialtyModel = new SpecialtyModel
+        {
+            Name = model.Name,
+            FacultyId = model.FacultyId
+        };
+        
+        await specialtyService.AddSpecialty(specialtyModel);
         
         return RedirectToAction("ShowFaculty", "Faculty", new { id = model.FacultyId });
     }
@@ -104,8 +115,18 @@ public class SpecialtyController(
     [HttpGet("create-study-plan")]
     public async Task<IActionResult> CreateStudyPlan(int specialtyId)
     {
+        bool ig = await studyPlanService.StudyPlanLasNew(specialtyId);
+        
+        if (!ig)
+        {
+            ViewBag.ErrorMessage = "Ви не можете створити новий навчальний план," +
+                                   " поки не буде завершено поточний семестр.";
+            return View(Enumerable.Empty<SubjectModel>());
+        }
+        
         var subjects = await subjectService.GetAllSubjectsAsync();
         @ViewBag.SpecialtyId = specialtyId;
+        
         return View(subjects);
     }
     
@@ -120,6 +141,15 @@ public class SpecialtyController(
     [HttpGet("create-session")]
     public async Task<IActionResult> CreateSession(int specialtyId)
     {
+        bool ig = await sessionService.SessionLastNew(specialtyId);
+        
+        if (!ig)
+        {
+            ViewBag.ErrorMessage = "Ви не можете створити нову сесію," +
+                                   " поки не буде створено семетр.";
+            return View(Enumerable.Empty<SubjectModel>());
+        }
+        
         var s = await studyPlanService.GetLastSemester(specialtyId);
         var subjects = s.Subjects;
         @ViewBag.SpecialtyId = specialtyId;

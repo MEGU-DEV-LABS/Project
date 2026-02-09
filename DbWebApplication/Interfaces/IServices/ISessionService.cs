@@ -10,4 +10,5 @@ public interface ISessionService
     Task<Session> GetSessionByIdAsync(int sessionId);
     Task DeleteSessionAsync(int sessionId);
     Task SetGradeAsync(int sessionId, int studentId, int subjectId, int grade);
+    Task<bool> SessionLastNew(int specialtyId);
 }

@@ -1,4 +1,4 @@
-@model List<SubjectModel>
+@model IEnumerable<SubjectModel>
 
 <style>
 
@@ -217,10 +217,16 @@
         border-top: 1px solid #e5e7eb;
         margin-top: 1.5rem;
     }
+    
+    .error{
+        color: red;
+        font-size: 25px;
+    }
 </style>
 
 
 <h1>Subject Picker for Enrollment</h1>
+<h1 class="error">@ViewBag.ErrorMessage</h1>
 
 <div class="columns-wrapper">
   <!-- Left Column: Available Subjects -->

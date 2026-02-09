@@ -16,4 +16,9 @@ public class StudyPlanService(IStudyPlanRepository repository, ISubjectRepositor
     {
         return await repository.GetLastSemester(specialtyId);
     }
+
+    public async Task<bool> StudyPlanLasNew(int specialtyId)
+    {
+        return await repository.StudyPlanLasNew(specialtyId);
+    }
 }

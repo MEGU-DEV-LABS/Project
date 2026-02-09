@@ -3,6 +3,7 @@ using DbWebApplication.Models;
 using DbWebApplication.Services;
 using DbWebApplication.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using ZXing.QrCode.Internal;
 
 namespace DbWebApplication.Controllers;
 
@@ -45,10 +46,19 @@ public class FacultyController(
     }
     
     [HttpPost("create")]
-    public async Task<IActionResult> CreateFaculty(FacultyModel model)
+    public async Task<IActionResult> CreateFaculty(CreateFacultyViewModel model)
     {
-       
-        await facultyService.CreateFaculty(model);
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        FacultyModel faculty = new FacultyModel()
+        {
+            Name = model.Name
+        };
+        
+        await facultyService.CreateFaculty(faculty);
         
         return RedirectToAction("AllFaculties");
     }

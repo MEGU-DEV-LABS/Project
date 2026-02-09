@@ -1,4 +1,5 @@
-@model DbWebApplication.Models.FacultyModel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DbWebApplication.ViewModels.CreateFacultyViewModel
 
 <h3 class="role">Новий факультет</h3>
 <form asp-action="CreateFaculty" asp-controller="Faculty" method="post" id="form__new__work">

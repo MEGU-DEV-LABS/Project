@@ -2,6 +2,7 @@
 using DbWebApplication.Interfaces;
 using DbWebApplication.Interfaces.IServices;
 using DbWebApplication.Models;
+using DbWebApplication.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DbWebApplication.Controllers;
@@ -45,17 +46,33 @@ public class SubjectController(ISubjectService service, AppDbContext context) : 
     }
     
     [HttpPost("create")]
-    public async Task<IActionResult> CreateSubject(SubjectModel model, IFormFile ImageFile, int specialtyId)
+    public async Task<IActionResult> CreateSubject(CreateSubjectViewModel model, IFormFile ImageFile, int specialtyId)
     {
+        if(!ModelState.IsValid)
+        {
+            var teachers = context.Teachers.ToList();
+            ViewBag.Teachers = teachers;
+            ViewBag.SpecialtyId = specialtyId;
+            return View(model);
+        }
+
+        SubjectModel subject = new SubjectModel()
+        {
+            SubjectName = model.SubjectName,
+            Hours = model.Hours,
+            Credits = model.Credits,
+            TeacherId = model.TeacherId
+        };
+        
         if (ImageFile != null && ImageFile.Length > 0)
         {
             using (var ms = new MemoryStream())
             {
                 await ImageFile.CopyToAsync(ms);
-                model.ImageData = ms.ToArray();
+                subject.ImageData = ms.ToArray();
             }
         }
-        await service.CreateSubjectAsync(model, specialtyId);
+        await service.CreateSubjectAsync(subject, specialtyId);
         
         return RedirectToAction("AllSubjects");
     }

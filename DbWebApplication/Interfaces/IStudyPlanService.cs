@@ -8,4 +8,5 @@ public interface IStudyPlanService
         List<int> subjectIds);
 
     Task<StudyPlan> GetLastSemester(int specialtyId);
+    Task<bool> StudyPlanLasNew(int specialtyId);
 }

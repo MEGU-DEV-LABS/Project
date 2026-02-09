@@ -45,4 +45,31 @@ public class StudyPlanRepository(AppDbContext context):IStudyPlanRepository
         else
             return s;
     }
+    
+    public async Task<bool> StudyPlanLasNew(int specialtyId)
+    {
+        var plan = await context.StudyPlans
+            .Where(p => p.SpecialtyId == specialtyId)
+            .OrderByDescending(x => x.SemesterNumber)
+            .FirstOrDefaultAsync();
+
+        var session = await context.Sessions
+            .Where(s => s.SpecialtyId == specialtyId)
+            .OrderByDescending(x => x.SemesterNumber)
+            .FirstOrDefaultAsync();
+        
+        if (plan == null && session == null)
+            return true;
+
+        if (plan is not null && session is not null)
+        {
+            if(plan.SemesterNumber == session.SemesterNumber)
+                return true;
+            else
+                return false;
+        }
+
+        return false;
+
+    }
 }

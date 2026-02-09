@@ -9,4 +9,5 @@ public interface ISessionRepository
     Task CreateAsync(Session session, List<SessionSubjects> subjects);
     Task DeleteAsync(int id);
     Task SetGradeAsync(int sessionId, int studentId, int subjectId, int grade);
+    Task<bool> SessionLastNew(int specialtyId);
 }

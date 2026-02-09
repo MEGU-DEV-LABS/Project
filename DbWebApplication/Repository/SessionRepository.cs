@@ -96,4 +96,26 @@ public class SessionRepository(AppDbContext context) : ISessionRepository
             await context.SaveChangesAsync();
         }
     }
+
+    public async Task<bool> SessionLastNew(int specialtyId)
+    {
+        var plan = await context.StudyPlans
+            .Where(p => p.SpecialtyId == specialtyId)
+            .OrderByDescending(x => x.SemesterNumber)
+            .FirstOrDefaultAsync();
+
+        var session = await context.Sessions
+            .Where(s => s.SpecialtyId == specialtyId)
+            .OrderByDescending(x => x.SemesterNumber)
+            .FirstOrDefaultAsync();
+
+        if (plan == null && session == null)
+            return false;
+
+        if (plan.SemesterNumber > session.SemesterNumber)
+            return true;
+        
+        return false;
+
+    }
 }
